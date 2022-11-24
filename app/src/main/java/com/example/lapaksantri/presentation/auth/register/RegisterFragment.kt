@@ -1,4 +1,4 @@
-package com.example.lapaksantri.presentation.auth.login
+package com.example.lapaksantri.presentation.auth.register
 
 import android.app.Dialog
 import android.os.Bundle
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -16,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.FragmentLoginBinding
+import com.example.lapaksantri.databinding.FragmentRegisterBinding
 import com.example.lapaksantri.utils.Resource
 import com.example.lapaksantri.utils.createLoadingDialog
 import com.example.lapaksantri.utils.showErrorSnackbar
@@ -25,34 +27,42 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class LoginFragment : Fragment() {
-    private var _binding: FragmentLoginBinding? = null
+class RegisterFragment : Fragment() {
+    private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: LoginViewModel by viewModels()
+    private val viewModel: RegisterViewModel by viewModels()
     private lateinit var loadingDialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         loadingDialog = createLoadingDialog(requireContext(), layoutInflater)
 
-        binding.tvRegister.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
+        binding.tvLogin.setOnClickListener {
+            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
 
-        binding.btnLogin.setOnClickListener {
-            login()
+        binding.btnRegister.setOnClickListener {
+            register()
         }
 
-        observeLoginResult()
+        observeRegisterResult()
         onInputTextChanged()
     }
 
@@ -61,27 +71,32 @@ class LoginFragment : Fragment() {
         _binding = null
     }
 
-    private fun login() {
+    private fun register() {
         with(binding) {
-            val email = edLoginEmail.text.toString()
-            val password = edLoginPassword.text.toString()
-            if (email.isBlank()) {
+            val name = edRegisterName.text.toString()
+            val email = edRegisterEmail.text.toString()
+            val password = edRegisterPassword.text.toString()
+
+            if (name.isEmpty()) {
+                edRegisterName.requestFocus()
+                textInputName.error = "Masukan Nama Anda"
+            }else if (email.isEmpty()) {
+                edRegisterEmail.requestFocus()
                 textInputEmail.error = "Masukan Email Anda"
-                textInputEmail.requestFocus()
             } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                 textInputEmail.error = "Penulisan Email Anda Salah"
                 textInputEmail.requestFocus()
-            } else if (password.isBlank()) {
+            } else if (password.isEmpty()) {
+                edRegisterPassword.requestFocus()
                 textInputPassword.error = "Masukan Password Anda"
-                textInputPassword.requestFocus()
             } else {
-                viewModel.login(email, password)
+                viewModel.register(name, email, password)
             }
         }
     }
 
-    private fun observeLoginResult() {
-        viewModel.loginResult
+    private fun observeRegisterResult() {
+        viewModel.registerResult
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach { result ->
                 when(result) {
@@ -95,7 +110,7 @@ class LoginFragment : Fragment() {
                     is Resource.Success -> {
                         loadingDialog.dismiss()
                         showSuccessSnackbar(binding.root, result.data.toString())
-                        findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                        findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
                     }
                 }
             }
@@ -103,6 +118,17 @@ class LoginFragment : Fragment() {
     }
 
     private fun onInputTextChanged() {
+        binding.textInputName.editText?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                binding.textInputName.isErrorEnabled = false
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        })
         binding.textInputEmail.editText?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
