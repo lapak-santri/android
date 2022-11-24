@@ -3,12 +3,16 @@ package com.example.lapaksantri.data.repositories
 import com.example.lapaksantri.data.local.data_store.DataStoreManager
 import com.example.lapaksantri.data.remote.network.AuthApiService
 import com.example.lapaksantri.data.remote.request.LoginRequest
+import com.example.lapaksantri.data.remote.response.ErrorResponse
 import com.example.lapaksantri.domain.repositories.AuthRepository
 import com.example.lapaksantri.utils.Resource
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
 
 class AuthRepositoryImpl(
     private val authApiService: AuthApiService,
@@ -25,8 +29,18 @@ class AuthRepositoryImpl(
             )
             dataStoreManager.saveName(response.name)
             dataStoreManager.saveToken(response.token)
+            emit(Resource.Success("Login Successful"))
         } catch (e: Exception) {
-            emit(Resource.Error("Terjadi Kesalahan"))
+            when(e) {
+                is HttpException -> {
+                    val errorMessageResponseType = object : TypeToken<ErrorResponse>() {}.type
+                    val error: ErrorResponse = Gson().fromJson(e.response()?.errorBody()?.charStream(), errorMessageResponseType)
+                    emit(Resource.Error(error.errorMessageResponse.message))
+                }
+                else -> {
+                    emit(Resource.Error("An unexpected error occurred"))
+                }
+            }
         }
     }
 
@@ -38,10 +52,10 @@ class AuthRepositoryImpl(
             if (token != "") {
                 emit(Resource.Success(true))
             } else {
-                emit(Resource.Error("Token Tidak Ada", false))
+                emit(Resource.Error("Token Not Exist", false))
             }
         } catch (e: Exception) {
-            emit(Resource.Error("Terjadi Kesalahan", false))
+            emit(Resource.Error("An unexpected error occurred", false))
         }
     }
 }
