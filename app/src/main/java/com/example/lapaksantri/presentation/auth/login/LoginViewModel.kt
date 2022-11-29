@@ -2,7 +2,7 @@ package com.example.lapaksantri.presentation.auth.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.lapaksantri.domain.usecases.LoginUseCase
+import com.example.lapaksantri.domain.usecases.auth.LoginUseCase
 import com.example.lapaksantri.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

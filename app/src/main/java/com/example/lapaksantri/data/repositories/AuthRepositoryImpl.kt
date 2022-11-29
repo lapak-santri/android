@@ -60,7 +60,6 @@ class AuthRepositoryImpl(
         }
     }
 
-
     override fun register(name: String, email: String, password: String): Flow<Resource<String>> = flow {
         emit(Resource.Loading())
         try {
@@ -83,6 +82,20 @@ class AuthRepositoryImpl(
                     emit(Resource.Error("An unexpected error occurred"))
                 }
             }
+        }
+    }
+
+    override fun getName(): Flow<Resource<String>> = flow {
+        emit(Resource.Loading())
+        try {
+            val name = dataStoreManager.name.first()
+            if (name != "") {
+                emit(Resource.Success(name))
+            } else {
+                emit(Resource.Error("Token Not Exist"))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error("An unexpected error occurred"))
         }
     }
 }

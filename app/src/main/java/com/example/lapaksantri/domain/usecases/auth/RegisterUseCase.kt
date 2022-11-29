@@ -1,4 +1,4 @@
-package com.example.lapaksantri.domain.usecases
+package com.example.lapaksantri.domain.usecases.auth
 
 import com.example.lapaksantri.domain.repositories.AuthRepository
 import com.example.lapaksantri.utils.Resource

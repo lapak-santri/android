@@ -32,7 +32,11 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.lapaksantri.presentation.home.HomeFragment"
-        android:label="HomeFragment" />
+        android:label="HomeFragment" >
+        <action
+            android:id="@+id/action_homeFragment_to_articleFragment"
+            app:destination="@id/articleFragment" />
+    </fragment>
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.lapaksantri.presentation.auth.register.RegisterFragment"
@@ -41,5 +45,14 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="com.example.lapaksantri.presentation.article.ArticleFragment"
+        android:label="fragment_article"
+        tools:layout="@layout/fragment_article" >
+        <argument
+            android:name="article"
+            app:argType="com.example.lapaksantri.domain.entities.Article" />
     </fragment>
 </navigation>
