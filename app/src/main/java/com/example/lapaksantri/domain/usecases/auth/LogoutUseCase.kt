@@ -5,7 +5,7 @@ import com.example.lapaksantri.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class SignOutUseCase @Inject constructor(
+class LogoutUseCase @Inject constructor(
     private val repository: AuthRepository
 ) {
     operator fun invoke(): Flow<Resource<Boolean>> = repository.signOut()

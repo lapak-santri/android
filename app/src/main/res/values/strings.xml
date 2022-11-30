@@ -22,5 +22,9 @@
     <string name="home">Home</string>
     <string name="profile">Profile</string>
     <string name="order">Order</string>
-    <string name="sign_out">Keluar</string>
+    <string name="logout">Keluar</string>
+    <string name="is_you_want_to_logout">Apakah Anda Ingin Keluar</string>
+    <string name="no">Tidak</string>
+    <string name="yes">Ya</string>
+    <string name="line">Garis</string>
 </resources>
