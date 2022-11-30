@@ -23,4 +23,12 @@
     <string name="profile">Profile</string>
     <string name="order">Order</string>
     <string name="sign_out">Keluar</string>
+    <string name="add_to_cart">Tambah Ke Keranjang</string>
+    <string name="varian_product">Varian Produk</string>
+    <string name="danger">Danger</string>
+    <string name="minimum_order">Pembelian Air Santri Minimal 5 Item</string>
+    <string name="plus">Tambah</string>
+    <string name="minus">Kurang</string>
+    <string name="out_of_stock">Stok Habis</string>
+    <string name="unit_name">/ %s</string>
 </resources>

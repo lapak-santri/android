@@ -64,4 +64,8 @@
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/addOrderFragment"
+        android:name="com.example.lapaksantri.presentation.order.add_order.AddOrderFragment"
+        android:label="AddOrderFragment" />
 </navigation>
