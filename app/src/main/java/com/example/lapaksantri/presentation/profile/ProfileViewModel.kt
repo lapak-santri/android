@@ -16,16 +16,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     private val getUserUseCase: GetUserUseCase,
-    private val signOutUseCase: SignOutUseCase,
 ) : ViewModel() {
     private val _user = MutableStateFlow<UIState<User>>(UIState())
     val user = _user.asStateFlow()
 
     private val _errorSnackbar = MutableSharedFlow<String>()
     val errorSnackbar = _errorSnackbar.asSharedFlow()
-
-    private val _signOutResult = MutableSharedFlow<Resource<Boolean>>()
-    val signOutResult = _signOutResult.asSharedFlow()
 
     init {
         getUserUseCase().onEach { result ->
@@ -52,14 +48,5 @@ class ProfileViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun signOut() {
-        val result = signOutUseCase()
-        viewModelScope.launch {
-            result.collect {
-                _signOutResult.emit(it)
-            }
-        }
     }
 }
