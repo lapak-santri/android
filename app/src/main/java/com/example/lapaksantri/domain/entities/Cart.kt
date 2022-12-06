@@ -1,11 +1,9 @@
 package com.example.lapaksantri.domain.entities
 
-data class Product(
+data class Cart(
     val id: Int,
     val name: String,
     val price: Double,
-    val stock: Int,
-    val unitName: String,
     val imagePath: String,
-    var quantityInCart: Int = 0
+    var quantity: Int,
 )

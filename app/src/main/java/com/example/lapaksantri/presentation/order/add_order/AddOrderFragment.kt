@@ -11,6 +11,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bumptech.glide.Glide
 import com.example.lapaksantri.databinding.FragmentAddOrderBinding
 import com.example.lapaksantri.utils.showErrorSnackbar
@@ -37,16 +38,21 @@ class AddOrderFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         orderAdapter = AddOrderAdapter(
-            {
-
+            { product, position ->
+                viewModel.plusCart(product)
+                orderAdapter.notifyItemChanged(position)
             },
-            {
-
+            { product, position ->
+                viewModel.minCart(product)
+                orderAdapter.notifyItemChanged(position)
             }
         )
 
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+        binding.btnOrder.setOnClickListener {
+            viewModel.addCart()
         }
 
         observeErrorSnackbar()
@@ -65,6 +71,7 @@ class AddOrderFragment : Fragment() {
     private fun observeProduct() {
         binding.rvProduct.layoutManager = LinearLayoutManager(context)
         binding.rvProduct.adapter = orderAdapter
+        (binding.rvProduct.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
         viewModel.products
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)

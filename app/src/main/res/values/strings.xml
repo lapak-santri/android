@@ -31,4 +31,15 @@
     <string name="minus">Kurang</string>
     <string name="out_of_stock">Stok Habis</string>
     <string name="unit_name">/ %s</string>
+    <string name="shipping">Pengiriman</string>
+    <string name="total_price">Total Bayar</string>
+    <string name="line">Garis</string>
+    <string name="total">Total</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="address">Alamat</string>
+    <string name="choose_address">Pilih Alamat</string>
+    <string name="select">Pilih</string>
+    <string name="confirmation_order">Konfirmasi Order</string>
+    <string name="your_cart_empty">Keranjang Anda Kosong</string>
+    <string name="choose_product_now">Pilih Produk Sekarang</string>
 </resources>

@@ -12,7 +12,7 @@ import com.example.lapaksantri.databinding.ProductItemBinding
 import com.example.lapaksantri.domain.entities.Product
 import com.example.lapaksantri.utils.visible
 
-class AddOrderAdapter(private val clickListener: (Product) -> Unit, private val minListener: (Product) -> Unit) : ListAdapter<Product, AddOrderAdapter.OrderViewHolder>(DiffCallback) {
+class AddOrderAdapter(private val plusListener: (Product, Int) -> Unit, private val minListener: (Product, Int) -> Unit) : ListAdapter<Product, AddOrderAdapter.OrderViewHolder>(DiffCallback) {
     companion object DiffCallback : DiffUtil.ItemCallback<Product>() {
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem.id == newItem.id
@@ -24,7 +24,7 @@ class AddOrderAdapter(private val clickListener: (Product) -> Unit, private val 
     }
 
     class OrderViewHolder(private val context: Context, private val binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(product: Product, listener: (Product) -> Unit, minListener: (Product) -> Unit) {
+        fun bind(product: Product, plusListener: (Product, Int) -> Unit, minListener: (Product, Int) -> Unit) {
             with(binding) {
                 if (product.stock == 0) {
                     tvOutOfStock.visible()
@@ -40,14 +40,16 @@ class AddOrderAdapter(private val clickListener: (Product) -> Unit, private val 
                 tvName.text = product.name
                 tvPrice.text = product.price.toString()
                 tvUnitName.text = resources.getString(R.string.unit_name, product.unitName)
-                tvQuantity.text = 0.toString()
+                tvQuantity.text = product.quantityInCart.toString()
                 btnPlus.setOnClickListener {
-                    listener(product)
+                    product.quantityInCart++
+                    plusListener(product, adapterPosition)
                 }
                 btnMinus.setOnClickListener {
-//                    if (product.quantity > 0) {
-//                        minListener(product)
-//                    }
+                    if (product.quantityInCart > 0) {
+                        product.quantityInCart--
+                        minListener(product, adapterPosition)
+                    }
                 }
             }
         }
@@ -60,7 +62,7 @@ class AddOrderAdapter(private val clickListener: (Product) -> Unit, private val 
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
         val product = getItem(position)
-        holder.bind(product, clickListener, minListener)
+        holder.bind(product, plusListener, minListener)
     }
 
 }
