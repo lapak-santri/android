@@ -35,3 +35,11 @@ fun createLoadingDialog(context: Context, layoutInflater: LayoutInflater): Dialo
 
     return loadingDialog
 }
+
+fun View.visible(){
+    visibility= View.VISIBLE
+}
+
+fun View.gone(){
+    visibility= View.GONE
+}

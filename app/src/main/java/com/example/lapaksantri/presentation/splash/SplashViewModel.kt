@@ -2,7 +2,7 @@ package com.example.lapaksantri.presentation.splash
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.lapaksantri.domain.usecases.CheckTokenUseCase
+import com.example.lapaksantri.domain.usecases.auth.CheckTokenUseCase
 import com.example.lapaksantri.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

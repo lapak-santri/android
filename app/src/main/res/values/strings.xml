@@ -11,4 +11,15 @@
     <string name="dont_have_an_account_yet">Belum punya akun?</string>
     <string name="password">Kata Sandi</string>
     <string name="loading">Memuat</string>
+    <string name="image">Image</string>
+    <string name="see_all">Lihat Semua</string>
+    <string name="next">Next</string>
+    <string name="cart">Keranjang</string>
+    <string name="new_information">Informasi Terbaru</string>
+    <string name="author_date">Oleh %1$s - %2$s</string>
+    <string name="calendar">Calendar</string>
+    <string name="back">Back</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
+    <string name="order">Order</string>
 </resources>
