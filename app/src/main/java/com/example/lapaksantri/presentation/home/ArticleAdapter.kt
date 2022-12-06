@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.ArticleItemBinding
 import com.example.lapaksantri.domain.entities.Article
+import com.example.lapaksantri.utils.formatDate
 
 class ArticleAdapter(private val clickListener: (Article) -> Unit) : ListAdapter<Article, ArticleAdapter.ViewHolder>(
     DiffCallback
@@ -35,7 +36,8 @@ class ArticleAdapter(private val clickListener: (Article) -> Unit) : ListAdapter
                 .load(article.imagePath)
                 .into(ivThumbnail)
                 tvTitle.text = article.title
-                tvDate.text = resources.getString(R.string.author_date, "Admin", article.publishedAt)
+                val date = formatDate(article.publishedAt)
+                tvDate.text = resources.getString(R.string.author_date, "Admin", date)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                     tvDesc.text = Html.fromHtml(article.description, Html.FROM_HTML_MODE_LEGACY)
                 } else {
