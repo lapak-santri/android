@@ -19,19 +19,13 @@ class AppRepositoryImpl @Inject constructor(
     override fun getSliders(): Flow<Resource<List<Slider>>> = flow {
         emit(Resource.Loading())
         try {
-//            val response = appApiService.getSliders()
-//            emit(Resource.Success(response.map { it.toEntity() }))
-            val listSliders = listOf(
+          val response = appApiService.getSliders()
+            emit(Resource.Success(response.dataSliderResponse.data.map {
                 Slider(
-                    1,
-                    "https://parfumalyamani44342.com/wp-content/uploads/2020/11/air-santri.jpg",
-                ),
-                Slider(
-                    2,
-                    "https://parfumalyamani44342.com/wp-content/uploads/2020/11/air-santri.jpg",
+                    id = it.id,
+                    imagePath = it.image[0]
                 )
-            )
-            emit(Resource.Success(listSliders))
+            }))
         } catch (e: Exception) {
             when(e) {
                 is HttpException -> {
