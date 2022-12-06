@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
-import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.FragmentArticleBinding
+import com.example.lapaksantri.utils.formatDate
 
 class ArticleFragment : Fragment() {
     private var _binding: FragmentArticleBinding? = null
@@ -37,7 +37,7 @@ class ArticleFragment : Fragment() {
                 .load(args.article.imagePath)
                 .into(ivThumbnail)
             tvTitle.text = args.article.title
-            tvDate.text = args.article.publishedAt
+            tvDate.text = formatDate(args.article.publishedAt)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 tvDesc.text = Html.fromHtml(args.article.description, Html.FROM_HTML_MODE_LEGACY)
             } else {
