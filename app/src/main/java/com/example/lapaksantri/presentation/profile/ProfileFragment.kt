@@ -1,15 +1,16 @@
 package com.example.lapaksantri.presentation.profile
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.bumptech.glide.Glide
+import androidx.navigation.fragment.findNavController
+import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.FragmentProfileBinding
 import com.example.lapaksantri.utils.gone
 import com.example.lapaksantri.utils.showErrorSnackbar
@@ -36,7 +37,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.linearLayoutSignOut.setOnClickListener {
-
+            findNavController().navigate(R.id.action_profileFragment_to_logoutFragment)
         }
 
         observeErrorSnackbar()

@@ -5,17 +5,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lapaksantri.domain.entities.User
 import com.example.lapaksantri.domain.usecases.auth.GetUserUseCase
-import com.example.lapaksantri.domain.usecases.auth.SignOutUseCase
 import com.example.lapaksantri.utils.Resource
 import com.example.lapaksantri.utils.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val getUserUseCase: GetUserUseCase,
+    private val getUserUseCase: GetUserUseCase
 ) : ViewModel() {
     private val _user = MutableStateFlow<UIState<User>>(UIState())
     val user = _user.asStateFlow()
