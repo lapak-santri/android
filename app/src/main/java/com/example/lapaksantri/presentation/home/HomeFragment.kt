@@ -59,6 +59,7 @@ class HomeFragment : Fragment() {
 
         sliderAdapter = SliderAdapter()
         articleAdapter = ArticleAdapter{
+            findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToArticleFragment(it))
         }
 
         binding.tvTime.text = viewModel.getTime()
