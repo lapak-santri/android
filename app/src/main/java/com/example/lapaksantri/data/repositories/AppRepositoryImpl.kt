@@ -43,32 +43,16 @@ class AppRepositoryImpl @Inject constructor(
     override fun getArticles(): Flow<Resource<List<Article>>> = flow {
         emit(Resource.Loading())
         try {
-//            val response = appApiService.getSliders()
-//            emit(Resource.Success(response.map { it.toEntity() }))
-            val listArticles = listOf(
+            val response = appApiService.getArticles()
+            emit(Resource.Success(response.dataArticleResponse.data.map {
                 Article(
-                    1,
-                    "",
-                    "Deskripsi",
-                "Judul Artikel",
-                    "https://parfumalyamani44342.com/wp-content/uploads/2020/11/air-santri.jpg",
-                ),
-                Article(
-                    2,
-                    "",
-                    "Deskripsi",
-                "Judul Artikel",
-                    "https://parfumalyamani44342.com/wp-content/uploads/2020/11/air-santri.jpg",
-                ),
-                Article(
-                    3,
-                    "",
-                    "Deskripsi",
-                "Judul Artikel",
-                    "https://parfumalyamani44342.com/wp-content/uploads/2020/11/air-santri.jpg",
-                ),
-            )
-            emit(Resource.Success(listArticles))
+                    id = it.id,
+                    title = it.title,
+                    description = it.description,
+                    publishedAt = it.createdAt,
+                    imagePath = it.image[0],
+                )
+            }))
         } catch (e: Exception) {
             when(e) {
                 is HttpException -> {
