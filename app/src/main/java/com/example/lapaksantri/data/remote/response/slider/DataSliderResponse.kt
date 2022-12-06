@@ -1,4 +1,4 @@
-package com.example.lapaksantri.data.remote.response
+package com.example.lapaksantri.data.remote.response.slider
 
 
 import com.google.gson.annotations.SerializedName
