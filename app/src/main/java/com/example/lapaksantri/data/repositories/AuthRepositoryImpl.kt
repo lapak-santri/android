@@ -5,6 +5,7 @@ import com.example.lapaksantri.data.remote.network.AuthApiService
 import com.example.lapaksantri.data.remote.request.LoginRequest
 import com.example.lapaksantri.data.remote.request.RegisterRequest
 import com.example.lapaksantri.data.remote.response.ErrorResponse
+import com.example.lapaksantri.domain.entities.User
 import com.example.lapaksantri.domain.repositories.AuthRepository
 import com.example.lapaksantri.utils.Resource
 import com.google.gson.Gson
@@ -96,6 +97,32 @@ class AuthRepositoryImpl(
             }
         } catch (e: Exception) {
             emit(Resource.Error("An unexpected error occurred"))
+        }
+    }
+
+    override fun getUser(): Flow<Resource<User>> = flow {
+        emit(Resource.Loading())
+        try {
+            val token = dataStoreManager.token.first()
+            if (token != "") {
+                val result = authApiService.getUser("Bearer $token")
+                emit(Resource.Success(result.userResponse.toEntity()))
+            } else {
+                emit(Resource.Error("Token Not Exist"))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
+        }
+    }
+
+    override fun signOut(): Flow<Resource<Boolean>> = flow {
+        emit(Resource.Loading())
+        try {
+            dataStoreManager.saveToken("")
+            dataStoreManager.saveName("")
+            emit(Resource.Success(true))
+        } catch (e: Exception) {
+            emit(Resource.Error("An unexpected error occurred", false))
         }
     }
 }

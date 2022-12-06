@@ -63,4 +63,13 @@
             android:name="article"
             app:argType="com.example.lapaksantri.domain.entities.Article" />
     </fragment>
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.lapaksantri.presentation.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 </navigation>
