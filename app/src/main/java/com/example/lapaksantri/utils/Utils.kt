@@ -10,6 +10,8 @@ import androidx.core.content.ContextCompat
 import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.LoadingDialogBinding
 import com.google.android.material.snackbar.Snackbar
+import java.text.SimpleDateFormat
+import java.util.*
 
 fun showErrorSnackbar(view: View, message: String) {
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT)
@@ -42,4 +44,13 @@ fun View.visible(){
 
 fun View.gone(){
     visibility= View.GONE
+}
+
+fun formatDate(date: String): String {
+    val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale("in", "ID"))
+    val dateFormatted = dateTimeFormatter.parse(date)
+    val stringDateFormatter = SimpleDateFormat("dd MMMM yyyy", Locale("in", "ID"))
+    dateFormatted?.let {
+        return stringDateFormatter.format(dateFormatted)
+    } ?: return ""
 }

@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.lapaksantri.databinding.FragmentArticleBinding
+import com.example.lapaksantri.utils.formatDate
 
 class ArticleFragment : Fragment() {
     private var _binding: FragmentArticleBinding? = null
@@ -19,7 +20,7 @@ class ArticleFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentArticleBinding.inflate(inflater, container, false)
         return binding.root
@@ -36,22 +37,12 @@ class ArticleFragment : Fragment() {
                 .load(args.article.imagePath)
                 .into(ivThumbnail)
             tvTitle.text = args.article.title
+            tvDate.text = formatDate(args.article.publishedAt)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 tvDesc.text = Html.fromHtml(args.article.description, Html.FROM_HTML_MODE_LEGACY)
             } else {
                 tvDesc.text = Html.fromHtml(args.article.description)
             }
-
-//            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale("in", "ID"))
-//            val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale("in", "ID"))
-//            val date = inputFormat.parse(args.article.publishedAt)
-//            date?.let {
-//                val formattedDate: String = outputFormat.format(it)
-//                tvDate.text = formattedDate
-//            } ?: kotlin.run {
-//                tvDate.visibility = View.GONE
-//            }
-            binding.tvDate.text = args.article.publishedAt
         }
     }
 

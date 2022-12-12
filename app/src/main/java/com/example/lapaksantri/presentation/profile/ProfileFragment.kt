@@ -10,12 +10,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
 import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.FragmentProfileBinding
-import com.example.lapaksantri.utils.Resource
 import com.example.lapaksantri.utils.gone
 import com.example.lapaksantri.utils.showErrorSnackbar
+import com.example.lapaksantri.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -38,12 +37,11 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.linearLayoutSignOut.setOnClickListener {
-            viewModel.signOut()
+            findNavController().navigate(R.id.action_profileFragment_to_logoutFragment)
         }
 
         observeErrorSnackbar()
         observeUser()
-        observeSignOutResult()
     }
 
     private fun observeErrorSnackbar() {
@@ -67,31 +65,14 @@ class ProfileFragment : Fragment() {
                     binding.shimmerLayoutImageProfile.stopShimmer()
                     binding.shimmerLayoutName.stopShimmer()
                     binding.shimmerLayoutEmail.stopShimmer()
-                    binding.shimmerLayoutImageProfile.visibility = View.GONE
-                    binding.shimmerLayoutName.visibility = View.GONE
-                    binding.shimmerLayoutEmail.visibility = View.GONE
-                    binding.ivProfile.visibility = View.VISIBLE
+                    binding.shimmerLayoutImageProfile.gone()
+                    binding.shimmerLayoutName.gone()
+                    binding.shimmerLayoutEmail.gone()
+                    binding.ivProfile.visible()
                     state.data?.let { user ->
-                        Glide.with(this@ProfileFragment)
-                            .load(user.imagePath)
-                            .into(binding.ivProfile)
                         binding.tvName.text =user.name
                         binding.tvEmail.text =user.email
                     }
-                }
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-    }
-
-    private fun observeSignOutResult() {
-        viewModel.signOutResult
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
-            .onEach { result ->
-                when(result) {
-                    is Resource.Success -> {
-                        findNavController().navigate(R.id.action_profileFragment_to_loginFragment)
-                    }
-                    else -> {}
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)

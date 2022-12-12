@@ -76,8 +76,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/ivProfile"
-                android:layout_width="@dimen/_70sdp"
-                android:layout_height="@dimen/_70sdp"
+                android:layout_width="@dimen/_75sdp"
+                android:layout_height="@dimen/_75sdp"
                 android:layout_marginTop="@dimen/_20sdp"
                 android:contentDescription="@string/profile"
                 android:scaleType="centerCrop"
@@ -89,7 +89,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_chainStyle="packed"
                 app:shapeAppearanceOverlay="@style/CircleImageView"
-                tools:src="@tools:sample/avatars" />
+                android:src="@drawable/ic_account" />
 
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmerLayoutName"
@@ -185,7 +185,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/sign_out"
+            android:contentDescription="@string/logout"
             android:padding="@dimen/_7sdp"
             android:src="@drawable/ic_sign_out" />
 
@@ -196,7 +196,7 @@
             android:layout_marginStart="@dimen/_7sdp"
             android:layout_weight="1"
             android:fontFamily="@font/poppins_medium"
-            android:text="@string/sign_out"
+            android:text="@string/logout"
             android:textColor="@color/black"
             android:textSize="@dimen/_12ssp"
             android:textStyle="bold" />
