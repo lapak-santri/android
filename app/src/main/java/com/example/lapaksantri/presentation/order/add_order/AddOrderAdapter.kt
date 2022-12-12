@@ -1,6 +1,5 @@
 package com.example.lapaksantri.presentation.order.add_order
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,6 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.ProductItemBinding
 import com.example.lapaksantri.domain.entities.Product
+import com.example.lapaksantri.utils.formatRupiah
 import com.example.lapaksantri.utils.visible
 
 class AddOrderAdapter(private val plusListener: (Product, Int) -> Unit, private val minListener: (Product, Int) -> Unit) : ListAdapter<Product, AddOrderAdapter.OrderViewHolder>(DiffCallback) {
@@ -23,7 +23,7 @@ class AddOrderAdapter(private val plusListener: (Product, Int) -> Unit, private 
         }
     }
 
-    class OrderViewHolder(private val context: Context, private val binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root){
+    class OrderViewHolder(private val binding: ProductItemBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(product: Product, plusListener: (Product, Int) -> Unit, minListener: (Product, Int) -> Unit) {
             with(binding) {
                 if (product.stock == 0) {
@@ -33,13 +33,11 @@ class AddOrderAdapter(private val plusListener: (Product, Int) -> Unit, private 
                     btnMinus.setImageResource(R.drawable.ic_minus_grey)
                     btnPlus.setImageResource(R.drawable.ic_plus_grey)
                 }
-                val resources = context.resources
                 Glide.with(itemView.context)
                     .load(product.imagePath)
                     .into(ivProduct)
                 tvName.text = product.name
-                tvPrice.text = product.price.toString()
-                tvUnitName.text = resources.getString(R.string.unit_name, product.unitName)
+                tvPrice.text = formatRupiah(product.price)
                 tvQuantity.text = product.quantityInCart.toString()
                 btnPlus.setOnClickListener {
                     product.quantityInCart++
@@ -57,7 +55,7 @@ class AddOrderAdapter(private val plusListener: (Product, Int) -> Unit, private 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
         val view = ProductItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return OrderViewHolder(parent.context, view)
+        return OrderViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {

@@ -19,33 +19,16 @@ class OrderRepositoryImpl @Inject constructor(
     override fun getProducts(): Flow<Resource<List<Product>>> = flow {
         emit(Resource.Loading())
         try {
-            val listProducts = listOf(
+           val response = orderApiService.getProduct()
+            emit(Resource.Success(response.dataProductResponse.data.map {
                 Product(
-                    1,
-                    "Botol",
-                    10000.0,
-                    50,
-                    "dus",
-                    "",
-                ),
-                Product(
-                    2,
-                    "Botol",
-                    10000.0,
-                    50,
-                    "dus",
-                    "",
-                ),
-                Product(
-                    3,
-                    "Botol",
-                    10000.0,
-                    50,
-                    "dus",
-                    "",
-                ),
-            )
-            emit(Resource.Success(listProducts))
+                    id = it.id,
+                    name = it.name,
+                    price = it.price.toDouble(),
+                    stock = it.quantity,
+                    imagePath = it.image[0],
+                )
+            }))
         } catch (e: Exception) {
             when(e) {
                 is HttpException -> {

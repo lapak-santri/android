@@ -83,4 +83,8 @@
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
     </dialog>
+    <fragment
+        android:id="@+id/addOrderFragment"
+        android:name="com.example.lapaksantri.presentation.order.add_order.AddOrderFragment"
+        android:label="AddOrderFragment" />
 </navigation>

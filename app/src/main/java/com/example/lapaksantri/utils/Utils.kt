@@ -10,6 +10,7 @@ import androidx.core.content.ContextCompat
 import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.LoadingDialogBinding
 import com.google.android.material.snackbar.Snackbar
+import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -53,4 +54,10 @@ fun formatDate(date: String): String {
     dateFormatted?.let {
         return stringDateFormatter.format(dateFormatted)
     } ?: return ""
+}
+
+fun formatRupiah(number: Double): String{
+    val localeID = Locale("in", "ID")
+    val formatRupiah = NumberFormat.getCurrencyInstance(localeID)
+    return formatRupiah.format(number)
 }

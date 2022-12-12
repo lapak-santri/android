@@ -5,7 +5,6 @@ data class Product(
     val name: String,
     val price: Double,
     val stock: Int,
-    val unitName: String,
     val imagePath: String,
     var quantityInCart: Int = 0
 )
