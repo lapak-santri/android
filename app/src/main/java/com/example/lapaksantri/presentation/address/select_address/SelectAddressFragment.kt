@@ -55,6 +55,8 @@ class SelectAddressFragment : Fragment() {
                 viewModel.setMainAddressId(it)
             },
             {
+                val action = SelectAddressFragmentDirections.actionSelectAddressFragmentToAddAddressFragment(it)
+                findNavController().navigate(action)
             }
         )
 
@@ -63,6 +65,8 @@ class SelectAddressFragment : Fragment() {
         }
 
         binding.btnAddAddress.setOnClickListener {
+            val action = SelectAddressFragmentDirections.actionSelectAddressFragmentToAddAddressFragment(null)
+            findNavController().navigate(action)
         }
 
         binding.btnSelectAddress.setOnClickListener {

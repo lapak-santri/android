@@ -112,5 +112,23 @@
             app:destination="@id/cartFragment"
             app:popUpTo="@id/cartFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_selectAddressFragment_to_addAddressFragment"
+            app:destination="@id/addAddressFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addAddressFragment"
+        android:name="com.example.lapaksantri.presentation.address.add_address.AddAddressFragment"
+        android:label="fragment_add_address"
+        tools:layout="@layout/fragment_add_address" >
+        <action
+            android:id="@+id/action_addAddressFragment_to_selectAddressFragment"
+            app:destination="@id/selectAddressFragment"
+            app:popUpTo="@id/selectAddressFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="address"
+            app:argType="com.example.lapaksantri.domain.entities.Address"
+            app:nullable="true" />
     </fragment>
 </navigation>

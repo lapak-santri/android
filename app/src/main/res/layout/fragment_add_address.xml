@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.address.add_address.AddAddressFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/_7sdp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline23"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline21"
+        app:layout_constraintTop_toBottomOf="@+id/textView12"
+        app:layout_constraintVertical_bias="1.0">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/_4sdp"
+            android:paddingBottom="@dimen/_13sdp">
+
+            <TextView
+                android:id="@+id/textView16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/input_shipping_address"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputDistrict"
+                style="@style/TextInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_13sdp"
+                app:endIconMode="custom"
+                app:endIconTint="@null"
+                app:helperTextEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView16">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/district"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputVillage"
+                style="@style/TextInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_13sdp"
+                app:endIconMode="custom"
+                app:endIconTint="@null"
+                app:helperTextEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputDistrict">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/village"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputFullAddress"
+                style="@style/TextInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_13sdp"
+                app:endIconMode="custom"
+                app:endIconTint="@null"
+                app:helperTextEnabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputVillage">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/detail_address"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputName"
+                style="@style/TextInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_13sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputFullAddress">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/recipient"
+                    android:inputType="textPersonName"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputPhoneNumber"
+                style="@style/TextInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_13sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputName">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/phone_number"
+                    android:inputType="phone"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/tandai_sebagai"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputPhoneNumber" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/textInputType"
+                style="@style/TextInput"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView17">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/EditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/area"
+                    android:inputType="text"
+                    tools:ignore="TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/textView19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_25sdp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/set_main_address"
+                android:textColor="@color/black"
+                android:textSize="@dimen/_12ssp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/btnDeleteAddress"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textInputType"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <Switch
+                android:id="@+id/switchIsMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/textView19"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/textView19"
+                tools:ignore="UseSwitchCompatOrMaterialXml,TouchTargetSizeCheck" />
+
+            <Button
+                android:id="@+id/btnSaveAddress"
+                style="@style/ButtonPrimary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_7sdp"
+                android:text="@string/save_address"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnDeleteAddress" />
+
+            <Button
+                android:id="@+id/btnDeleteAddress"
+                style="@style/ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/delete_address"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/btnSaveAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <TextView
+        android:id="@+id/textView12"
+        style="@style/TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/address"
+        app:layout_constraintEnd_toStartOf="@+id/guideline23"
+        app:layout_constraintStart_toStartOf="@+id/guideline21"
+        app:layout_constraintTop_toTopOf="@+id/guideline22" />
+
+    <ImageView
+        android:id="@+id/btnBack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/back"
+        android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="@+id/textView12"
+        app:layout_constraintStart_toStartOf="@+id/guideline21"
+        app:layout_constraintTop_toTopOf="@+id/guideline22"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline21"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline22"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
