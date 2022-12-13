@@ -61,3 +61,8 @@ fun formatRupiah(number: Double): String{
     val formatRupiah = NumberFormat.getCurrencyInstance(localeID)
     return formatRupiah.format(number)
 }
+
+fun formatDatePicker(date: Long): String {
+    val stringDateFormatter = SimpleDateFormat("dd MMMM yyyy", Locale("in", "ID"))
+    return stringDateFormatter.format(date)
+}

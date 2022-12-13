@@ -21,8 +21,9 @@ object OrderModule {
     @Singleton
     fun provideOrderRepository(
         authApiService: OrderApiService,
+        dataStoreManager: DataStoreManager
     ): OrderRepository {
-        return OrderRepositoryImpl(authApiService)
+        return OrderRepositoryImpl(authApiService, dataStoreManager)
     }
 
     @Provides

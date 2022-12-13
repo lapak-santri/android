@@ -32,4 +32,16 @@
     <string name="minus">Minus</string>
     <string name="out_of_stock">Stok Habis</string>
     <string name="unit_name">/ %s</string>
+    <string name="total_pay">Total Bayar</string>
+    <string name="shipping">Pengiriman</string>
+    <string name="total">Total</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="next">Next</string>
+    <string name="address">Alamat</string>
+    <string name="choose_address">Pilih Alamat</string>
+    <string name="confirmation_order">Konfirmasi Order</string>
+    <string name="thumbnail">Thumbnail</string>
+    <string name="your_cart_empty">Keranjang Anda Kosong</string>
+    <string name="pilih_produk_sekarang">Pilih Produk Sekarang</string>
+    <string name="address_type">%1$s - %2$s</string>
 </resources>

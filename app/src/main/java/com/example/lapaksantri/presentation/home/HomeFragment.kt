@@ -61,6 +61,9 @@ class HomeFragment : Fragment() {
         }
 
         binding.tvTime.text = viewModel.getTime()
+        binding.btnCart.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_cartFragment)
+        }
 
         observeErrorSnackbar()
         observeName()

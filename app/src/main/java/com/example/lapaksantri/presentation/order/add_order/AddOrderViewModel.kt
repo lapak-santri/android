@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddOrderViewModel @Inject constructor(
-    private val getProductsUseCase: GetProductsUseCase
+    getProductsUseCase: GetProductsUseCase
 ) : ViewModel() {
     private val _products = MutableStateFlow<UIState<List<Product>>>(UIState())
     val products =  _products.asStateFlow()
@@ -28,7 +28,6 @@ class AddOrderViewModel @Inject constructor(
         getProductsUseCase().onEach { result ->
             when(result) {
                 is Resource.Success -> {
-                    Log.d("USER",result.data.toString())
                     _products.value = _products.value.copy(
                         data = result.data,
                         isLoading = false
