@@ -157,6 +157,7 @@ class CartFragment : Fragment() {
                     }
 
                     binding.btnSelectAddress.setOnClickListener {
+                        findNavController().navigate(R.id.action_cartFragment_to_selectAddressFragment)
                     }
                 }
             }

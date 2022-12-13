@@ -6,8 +6,8 @@ import com.example.lapaksantri.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class GetMainAddressUseCase @Inject constructor(
+class GetAddressesUseCase @Inject constructor(
     private val repository: AddressRepository,
 ) {
-    operator fun invoke(): Flow<Resource<Address?>> = repository.getMainAddress()
+    operator fun invoke(): Flow<Resource<List<Address>>> = repository.getAddresses()
 }

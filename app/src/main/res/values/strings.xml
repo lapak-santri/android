@@ -44,4 +44,8 @@
     <string name="your_cart_empty">Keranjang Anda Kosong</string>
     <string name="pilih_produk_sekarang">Pilih Produk Sekarang</string>
     <string name="address_type">%1$s - %2$s</string>
+    <string name="choose_shipping_address">Pilih Alamat Pengiriman</string>
+    <string name="edit">Ubah</string>
+    <string name="add_address">Tambah Alamat</string>
+    <string name="shimmer">shimmer</string>
 </resources>
