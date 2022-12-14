@@ -1,4 +1,4 @@
-package id.co.santri.presentation.home
+package com.example.lapaksantri.presentation.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -41,5 +41,9 @@ class MainActivity : AppCompatActivity() {
                 else -> binding.bottomNavView.gone()
             }
         }
+
+        binding.btnOrder.setOnClickListener {
+            navController.navigate(R.id.addOrderFragment)
+        }
     }
 }

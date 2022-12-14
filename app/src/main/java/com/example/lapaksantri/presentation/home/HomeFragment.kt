@@ -23,12 +23,10 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.FragmentHomeBinding
-import com.example.lapaksantri.databinding.FragmentLoginBinding
 import com.example.lapaksantri.utils.gone
 import com.example.lapaksantri.utils.showErrorSnackbar
 import com.example.lapaksantri.utils.visible
 import dagger.hilt.android.AndroidEntryPoint
-import id.co.santri.presentation.home.SliderAdapter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.math.abs
