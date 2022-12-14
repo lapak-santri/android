@@ -5,22 +5,28 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lapaksantri.domain.entities.Cart
 import com.example.lapaksantri.domain.entities.Product
+import com.example.lapaksantri.domain.usecases.order.AddCartsUseCase
 import com.example.lapaksantri.domain.usecases.order.GetProductsUseCase
 import com.example.lapaksantri.utils.Resource
 import com.example.lapaksantri.utils.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddOrderViewModel @Inject constructor(
-    private val getProductsUseCase: GetProductsUseCase
+    getProductsUseCase: GetProductsUseCase,
+    private val addCartsUseCase: AddCartsUseCase
 ) : ViewModel() {
     private val _products = MutableStateFlow<UIState<List<Product>>>(UIState())
     val products =  _products.asStateFlow()
 
     private val _errorSnackbar = MutableSharedFlow<String>()
     val errorSnackbar = _errorSnackbar.asSharedFlow()
+
+    private val _addCartsResult = MutableSharedFlow<Resource<String>>()
+    val addCartsResult = _addCartsResult.asSharedFlow()
 
     private val _carts = MutableStateFlow<ArrayList<Cart>>(arrayListOf())
 
@@ -77,7 +83,11 @@ class AddOrderViewModel @Inject constructor(
         }
     }
 
-    fun addCart() {
-        Log.d("CART", _carts.value.toString())
+    fun addCarts() {
+        viewModelScope.launch {
+            addCartsUseCase.invoke(_carts.value).collect {
+                _addCartsResult.emit(it)
+            }
+        }
     }
 }
