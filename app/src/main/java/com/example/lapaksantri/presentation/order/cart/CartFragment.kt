@@ -119,9 +119,15 @@ class CartFragment : Fragment() {
                     if (state.data != null && state.data.isNotEmpty()) {
                         binding.rvOrder.visible()
                         binding.scrollView.visible()
+                        binding.groupEmpty.gone()
                     } else {
                         binding.rvOrder.gone()
                         binding.scrollView.gone()
+                        binding.groupEmpty.visible()
+
+                        binding.btnOrder.setOnClickListener {
+                            findNavController().navigate(R.id.action_cartFragment_to_addOrderFragment)
+                        }
                     }
                 }
             }
