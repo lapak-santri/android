@@ -7,6 +7,12 @@ import kotlinx.coroutines.flow.Flow
 
 interface OrderRepository {
     fun getProducts(): Flow<Resource<List<Product>>>
+    fun getCarts(): Flow<Resource<List<Cart>>>
+    fun updateCarts(
+        cartId: Int,
+        type: String
+    ): Flow<Resource<String>>
+    fun deleteCarts(cartId: List<Int>): Flow<Resource<String>>
     fun addCarts(
         carts: List<Cart>
     ): Flow<Resource<String>>

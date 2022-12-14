@@ -1,6 +1,5 @@
 package com.example.lapaksantri.presentation.order.add_order
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lapaksantri.domain.entities.Cart
@@ -16,8 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddOrderViewModel @Inject constructor(
-    getProductsUseCase: GetProductsUseCase,
-    private val addCartsUseCase: AddCartsUseCase
+    private val getProductsUseCase: GetProductsUseCase,
+    private val addCartsUseCase: AddCartsUseCase,
 ) : ViewModel() {
     private val _products = MutableStateFlow<UIState<List<Product>>>(UIState())
     val products =  _products.asStateFlow()
@@ -31,10 +30,13 @@ class AddOrderViewModel @Inject constructor(
     private val _carts = MutableStateFlow<ArrayList<Cart>>(arrayListOf())
 
     init {
+        getProducts()
+    }
+
+    fun getProducts() {
         getProductsUseCase().onEach { result ->
             when(result) {
                 is Resource.Success -> {
-                    Log.d("USER",result.data.toString())
                     _products.value = _products.value.copy(
                         data = result.data,
                         isLoading = false
@@ -63,11 +65,12 @@ class AddOrderViewModel @Inject constructor(
             _carts.value[it].quantity++
         } ?: kotlin.run {
             _carts.value.add(Cart(
-                product.id,
-                product.name,
-                product.price,
-                product.imagePath,
-                1,
+                id = product.id,
+                name = product.name,
+                price = product.price,
+                imagePath = product.imagePath,
+                quantity = 1,
+                cartId = arrayListOf()
             ))
         }
     }
@@ -85,9 +88,17 @@ class AddOrderViewModel @Inject constructor(
 
     fun addCarts() {
         viewModelScope.launch {
-            addCartsUseCase.invoke(_carts.value).collect {
-                _addCartsResult.emit(it)
+            if (_carts.value.isEmpty()) {
+                _errorSnackbar.emit("Pilih Produk Terlebih Dahulu")
+            } else {
+                addCartsUseCase.invoke(_carts.value).collect {
+                    _addCartsResult.emit(it)
+                }
             }
         }
+    }
+
+    fun clearCarts() {
+        _carts.value = arrayListOf()
     }
 }

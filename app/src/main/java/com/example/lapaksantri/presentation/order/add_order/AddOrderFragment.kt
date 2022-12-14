@@ -1,6 +1,5 @@
 package com.example.lapaksantri.presentation.order.add_order
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,6 +22,7 @@ import com.example.lapaksantri.utils.showSuccessSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import android.app.Dialog
 
 @AndroidEntryPoint
 class AddOrderFragment : Fragment() {
@@ -38,6 +38,11 @@ class AddOrderFragment : Fragment() {
     ): View {
         _binding = FragmentAddOrderBinding.inflate(inflater, container, false)
         return  binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getProducts()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -110,6 +115,7 @@ class AddOrderFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         loadingDialog.dismiss()
+                        findNavController().navigate(R.id.action_addOrderFragment_to_cartFragment)
                     }
                 }
             }

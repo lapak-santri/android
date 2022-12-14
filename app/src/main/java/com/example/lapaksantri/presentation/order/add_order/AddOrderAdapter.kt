@@ -62,5 +62,4 @@ class AddOrderAdapter(private val plusListener: (Product, Int) -> Unit, private 
         val product = getItem(position)
         holder.bind(product, plusListener, minListener)
     }
-
 }

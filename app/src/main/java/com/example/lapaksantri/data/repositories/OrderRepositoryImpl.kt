@@ -1,11 +1,10 @@
 package com.example.lapaksantri.data.repositories
 
-import android.util.Log
 import com.example.lapaksantri.data.local.data_store.DataStoreManager
 import com.example.lapaksantri.data.remote.network.OrderApiService
 import com.example.lapaksantri.data.remote.request.AddCartRequest
+import com.example.lapaksantri.data.remote.request.UpdateCartRequest
 import com.example.lapaksantri.data.remote.response.ErrorResponse
-import com.example.lapaksantri.domain.entities.Article
 import com.example.lapaksantri.domain.entities.Cart
 import com.example.lapaksantri.domain.entities.Product
 import com.example.lapaksantri.domain.repositories.OrderRepository
@@ -49,6 +48,112 @@ class OrderRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getCarts(): Flow<Resource<List<Cart>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val token = dataStoreManager.token.first()
+            if (token != "") {
+                val response = orderApiService.getCart(
+                    token = "Bearer $token"
+                )
+                val carts = arrayListOf<Cart>()
+                response.dataCartResponse.data.forEach { cartResponse ->
+                    val product = cartResponse.product
+                    val index = carts.indices.find { product.id == carts[it].id }
+                    if (index == -1 || index == null) {
+                        carts.add(
+                            Cart(
+                                id = product.id,
+                                name = product.name,
+                                price = product.price.toDouble(),
+                                imagePath = product.image[0],
+                                quantity = cartResponse.quantity,
+                                cartId = arrayListOf(cartResponse.id)
+                            )
+                        )
+                    } else {
+                        carts[index].quantity += cartResponse.quantity
+                        carts[index].cartId.add(cartResponse.id)
+                    }
+                }
+                emit(Resource.Success(carts))
+            } else {
+                emit(Resource.Error("Token Not Exist"))
+            }
+        } catch (e: Exception) {
+            when(e) {
+                is HttpException -> {
+                    val errorMessageResponseType = object : TypeToken<ErrorResponse>() {}.type
+                    val error: ErrorResponse = Gson().fromJson(e.response()?.errorBody()?.charStream(), errorMessageResponseType)
+                    emit(Resource.Error(error.errorMessageResponse.message))
+                }
+                else -> {
+                    emit(Resource.Error("An unexpected error occurred"))
+                }
+            }
+        }
+    }
+
+    override fun updateCarts(cartId: Int, type: String): Flow<Resource<String>> = flow {
+        emit(Resource.Loading())
+        try {
+            val token = dataStoreManager.token.first()
+            if (token != "") {
+                orderApiService.updateCart(
+                    token = "Bearer $token",
+                    updateCartRequest = UpdateCartRequest(
+                        idProduct = cartId,
+                        quantity = 1,
+                        type = type
+                    )
+                )
+                emit(Resource.Success("Success"))
+            } else {
+                emit(Resource.Error("Token Not Exist"))
+            }
+        } catch (e: Exception) {
+            when(e) {
+                is HttpException -> {
+                    val errorMessageResponseType = object : TypeToken<ErrorResponse>() {}.type
+                    val error: ErrorResponse = Gson().fromJson(e.response()?.errorBody()?.charStream(), errorMessageResponseType)
+                    emit(Resource.Error(error.errorMessageResponse.message))
+                }
+                else -> {
+                    emit(Resource.Error("An unexpected error occurred"))
+                }
+            }
+        }
+    }
+
+    override fun deleteCarts(cartId: List<Int>): Flow<Resource<String>> = flow {
+        emit(Resource.Loading())
+        try {
+            val token = dataStoreManager.token.first()
+            if (token != "") {
+                cartId.forEach {
+                    orderApiService.deleteCart(
+                        token = "Bearer $token",
+                        cartId = it
+                    )
+                }
+                emit(Resource.Success("Success"))
+            } else {
+                emit(Resource.Error("Token Not Exist"))
+            }
+        } catch (e: Exception) {
+            when(e) {
+                is HttpException -> {
+                    val errorMessageResponseType = object : TypeToken<ErrorResponse>() {}.type
+                    val error: ErrorResponse = Gson().fromJson(e.response()?.errorBody()?.charStream(), errorMessageResponseType)
+                    emit(Resource.Error(error.errorMessageResponse.message))
+                }
+                else -> {
+                    emit(Resource.Error("An unexpected error occurred"))
+                }
+            }
+        }
+    }
+
     override fun addCarts(carts: List<Cart>): Flow<Resource<String>> = flow {
         emit(Resource.Loading())
         try {
@@ -56,7 +161,7 @@ class OrderRepositoryImpl @Inject constructor(
             if (token != "") {
                 orderApiService.addCarts(
                     token = "Bearer $token",
-                    cartRequest = carts.map {
+                    addCartRequest = carts.map {
                         AddCartRequest(
                             idProduct = it.id,
                             quantity = it.quantity,

@@ -61,11 +61,20 @@ class HomeFragment : Fragment() {
         }
 
         binding.tvTime.text = viewModel.getTime()
+        binding.btnCart.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_cartFragment)
+        }
 
         observeErrorSnackbar()
         observeName()
+        observeCartCount()
         setupViewPager()
         setupInformation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getCartCount()
     }
 
     private fun observeErrorSnackbar() {
@@ -87,6 +96,22 @@ class HomeFragment : Fragment() {
                     binding.shimmerLayoutName.stopShimmer()
                     binding.shimmerLayoutName.gone()
                     binding.tvName.text = state.data
+                }
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun observeCartCount() {
+        viewModel.cartCount
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach { state ->
+                if (!state.isLoading) {
+                    if (state.data != 0) {
+                     binding.tvBadge.visible()
+                     binding.tvBadge.text = state.data.toString()
+                    }
+                } else {
+                    binding.tvBadge.gone()
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
