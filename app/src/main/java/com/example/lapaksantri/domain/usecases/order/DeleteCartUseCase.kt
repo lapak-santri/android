@@ -8,5 +8,5 @@ import javax.inject.Inject
 class DeleteCartUseCase @Inject constructor(
     private val repository: OrderRepository
 ) {
-    operator fun invoke(cartId: Int): Flow<Resource<String>> = repository.deleteCarts(cartId)
+    operator fun invoke(cartId: List<Int>): Flow<Resource<String>> = repository.deleteCarts(cartId)
 }

@@ -89,7 +89,11 @@
     <fragment
         android:id="@+id/addOrderFragment"
         android:name="com.example.lapaksantri.presentation.order.add_order.AddOrderFragment"
-        android:label="AddOrderFragment" />
+        android:label="AddOrderFragment" >
+        <action
+            android:id="@+id/action_addOrderFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
     <fragment
         android:id="@+id/cartFragment"
         android:name="com.example.lapaksantri.presentation.order.cart.CartFragment"

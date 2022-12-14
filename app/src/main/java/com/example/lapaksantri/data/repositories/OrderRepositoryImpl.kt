@@ -1,10 +1,10 @@
 package com.example.lapaksantri.data.repositories
 
+import com.example.lapaksantri.data.local.data_store.DataStoreManager
 import com.example.lapaksantri.data.remote.network.OrderApiService
 import com.example.lapaksantri.data.remote.request.AddCartRequest
 import com.example.lapaksantri.data.remote.request.UpdateCartRequest
 import com.example.lapaksantri.data.remote.response.ErrorResponse
-import com.example.lapaksantri.domain.entities.Article
 import com.example.lapaksantri.domain.entities.Cart
 import com.example.lapaksantri.domain.entities.Product
 import com.example.lapaksantri.domain.repositories.OrderRepository
@@ -56,38 +56,27 @@ class OrderRepositoryImpl @Inject constructor(
                 val response = orderApiService.getCart(
                     token = "Bearer $token"
                 )
-                emit(Resource.Success(response.dataCartResponse.data.map {
-                    Cart(
-                        id = it.product.id,
-                        name = it.product.name,
-                        price = it.product.price.toDouble(),
-                        imagePath = it.product.image[0],
-                        quantity = it.quantity,
-                    )
-                }))
-            } else {
-                emit(Resource.Error("Token Not Exist"))
-            }
-        } catch (e: Exception) {
-            when(e) {
-                is HttpException -> {
-                    val errorMessageResponseType = object : TypeToken<ErrorResponse>() {}.type
-                    val error: ErrorResponse = Gson().fromJson(e.response()?.errorBody()?.charStream(), errorMessageResponseType)
-                    emit(Resource.Error(error.errorMessageResponse.message))
+                val carts = arrayListOf<Cart>()
+                response.dataCartResponse.data.forEach { cartResponse ->
+                    val product = cartResponse.product
+                    val index = carts.indices.find { product.id == carts[it].id }
+                    if (index == -1 || index == null) {
+                        carts.add(
+                            Cart(
+                                id = product.id,
+                                name = product.name,
+                                price = product.price.toDouble(),
+                                imagePath = product.image[0],
+                                quantity = cartResponse.quantity,
+                                cartId = arrayListOf(cartResponse.id)
+                            )
+                        )
+                    } else {
+                        carts[index].quantity += cartResponse.quantity
+                        carts[index].cartId.add(cartResponse.id)
+                    }
                 }
-                else -> {
-                    emit(Resource.Error("An unexpected error occurred"))
-                }
-            }
-        }
-    }
-
-    override fun addCarts(carts: List<Cart>): Flow<Resource<String>> = flow {
-        emit(Resource.Loading())
-        try {
-            val token = dataStoreManager.token.first()
-            if (token != "") {
-                emit(Resource.Success("Success"))
+                emit(Resource.Success(carts))
             } else {
                 emit(Resource.Error("Token Not Exist"))
             }
@@ -136,11 +125,17 @@ class OrderRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun deleteCarts(cartId: Int): Flow<Resource<String>> = flow {
+    override fun deleteCarts(cartId: List<Int>): Flow<Resource<String>> = flow {
         emit(Resource.Loading())
         try {
             val token = dataStoreManager.token.first()
             if (token != "") {
+                cartId.forEach {
+                    orderApiService.deleteCart(
+                        token = "Bearer $token",
+                        cartId = it
+                    )
+                }
                 emit(Resource.Success("Success"))
             } else {
                 emit(Resource.Error("Token Not Exist"))
@@ -166,7 +161,7 @@ class OrderRepositoryImpl @Inject constructor(
             if (token != "") {
                 orderApiService.addCarts(
                     token = "Bearer $token",
-                    cartRequest = carts.map {
+                    addCartRequest = carts.map {
                         AddCartRequest(
                             idProduct = it.id,
                             quantity = it.quantity,

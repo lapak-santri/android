@@ -115,10 +115,13 @@ class CartFragment : Fragment() {
                 } else {
                     binding.shimmerLayoutCart.stopShimmer()
                     binding.shimmerLayoutCart.visibility = View.GONE
+                    cartAdapter.submitList(state.data)
                     if (state.data != null && state.data.isNotEmpty()) {
-                        binding.rvOrder.visibility = View.VISIBLE
-                        binding.scrollView.visibility = View.VISIBLE
-                        cartAdapter.submitList(state.data)
+                        binding.rvOrder.visible()
+                        binding.scrollView.visible()
+                    } else {
+                        binding.rvOrder.gone()
+                        binding.scrollView.gone()
                     }
                 }
             }
