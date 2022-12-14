@@ -1,5 +1,6 @@
 package com.example.lapaksantri.presentation.order.add_order
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +14,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.bumptech.glide.Glide
+import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.FragmentAddOrderBinding
+import com.example.lapaksantri.utils.Resource
+import com.example.lapaksantri.utils.createLoadingDialog
 import com.example.lapaksantri.utils.showErrorSnackbar
+import com.example.lapaksantri.utils.showSuccessSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -25,6 +30,7 @@ class AddOrderFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: AddOrderViewModel by viewModels()
     private lateinit var orderAdapter: AddOrderAdapter
+    private lateinit var loadingDialog: Dialog
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +42,7 @@ class AddOrderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        loadingDialog = createLoadingDialog(requireContext(), layoutInflater)
 
         orderAdapter = AddOrderAdapter(
             { product, position ->
@@ -52,11 +59,12 @@ class AddOrderFragment : Fragment() {
             findNavController().navigateUp()
         }
         binding.btnOrder.setOnClickListener {
-            viewModel.addCart()
+            viewModel.addCarts()
         }
 
         observeErrorSnackbar()
         observeProduct()
+        observeAddCartsResult()
     }
 
     private fun observeErrorSnackbar() {
@@ -83,6 +91,26 @@ class AddOrderFragment : Fragment() {
                     binding.shimmerLayoutProduct.visibility = View.GONE
                     binding.rvProduct.visibility = View.VISIBLE
                     orderAdapter.submitList(state.data)
+                }
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun observeAddCartsResult() {
+        viewModel.addCartsResult
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach { result ->
+                when(result) {
+                    is Resource.Error -> {
+                        loadingDialog.dismiss()
+                        showErrorSnackbar(binding.root, result.message.toString())
+                    }
+                    is Resource.Loading -> {
+                        loadingDialog.show()
+                    }
+                    is Resource.Success -> {
+                        loadingDialog.dismiss()
+                    }
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)

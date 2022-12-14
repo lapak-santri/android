@@ -14,13 +14,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddOrderViewModel @Inject constructor(
-    getProductsUseCase: GetProductsUseCase
+    getProductsUseCase: GetProductsUseCase,
+    private val addCartsUseCase: AddCartsUseCase
 ) : ViewModel() {
     private val _products = MutableStateFlow<UIState<List<Product>>>(UIState())
     val products =  _products.asStateFlow()
 
     private val _errorSnackbar = MutableSharedFlow<String>()
     val errorSnackbar = _errorSnackbar.asSharedFlow()
+
+    private val _addCartsResult = MutableSharedFlow<Resource<String>>()
+    val addCartsResult = _addCartsResult.asSharedFlow()
 
     private val _carts = MutableStateFlow<ArrayList<Cart>>(arrayListOf())
 
@@ -76,7 +80,11 @@ class AddOrderViewModel @Inject constructor(
         }
     }
 
-    fun addCart() {
-        Log.d("CART", _carts.value.toString())
+    fun addCarts() {
+        viewModelScope.launch {
+            addCartsUseCase.invoke(_carts.value).collect {
+                _addCartsResult.emit(it)
+            }
+        }
     }
 }
