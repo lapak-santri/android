@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvNameShimmer"
+        android:layout_width="@dimen/_100sdp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/secondary_green"
+        android:textSize="@dimen/_12ssp"
+        android:background="@drawable/shimmer_bg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvQtyShimmer"
+        android:layout_width="@dimen/_10sdp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_10ssp"
+        android:background="@drawable/shimmer_bg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameShimmer" />
+
+    <TextView
+        android:id="@+id/tvPriceShimmer"
+        android:layout_width="@dimen/_50sdp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_medium"
+        android:textColor="@color/black"
+        android:textSize="@dimen/_10ssp"
+        android:background="@drawable/shimmer_bg"
+        app:layout_constraintBottom_toBottomOf="@+id/tvQtyShimmer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvNameShimmer" />
+</androidx.constraintlayout.widget.ConstraintLayout>

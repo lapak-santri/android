@@ -107,6 +107,9 @@
         <action
             android:id="@+id/action_cartFragment_to_selectAddressFragment"
             app:destination="@id/selectAddressFragment" />
+        <action
+            android:id="@+id/action_cartFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/selectAddressFragment"
@@ -136,5 +139,14 @@
             android:name="address"
             app:argType="com.example.lapaksantri.domain.entities.Address"
             app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.example.lapaksantri.presentation.order.order_detail.OrderDetailFragment"
+        android:label="fragment_order_detail"
+        tools:layout="@layout/fragment_order_detail" >
+        <argument
+            android:name="transaction"
+            app:argType="com.example.lapaksantri.domain.entities.Transaction" />
     </fragment>
 </navigation>
