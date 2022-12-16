@@ -7,5 +7,6 @@ data class Address(
     val detailAddress: String,
     val area: String,
     val district: String,
-    val village: String
+    val village: String,
+    var isMain: Boolean,
 )

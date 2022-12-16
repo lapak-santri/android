@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import com.example.lapaksantri.utils.Constants.ADDRESS_ID
 import com.example.lapaksantri.utils.Constants.DATA_STORE
 import com.example.lapaksantri.utils.Constants.NAME
 import com.example.lapaksantri.utils.Constants.TOKEN
@@ -18,6 +19,7 @@ class DataStoreManager(val context: Context) {
     companion object {
         val KEY_TOKEN = stringPreferencesKey(TOKEN)
         val KEY_NAME = stringPreferencesKey(NAME)
+        val KEY_ADDRESS_ID = stringPreferencesKey(ADDRESS_ID)
     }
 
     suspend fun saveName(name: String) {
@@ -40,5 +42,16 @@ class DataStoreManager(val context: Context) {
     val token: Flow<String>
         get() = context.dataStore.data.map { preferences ->
             preferences[KEY_TOKEN] ?: ""
+        }
+
+    suspend fun saveAddressId(id: Int) {
+        context.dataStore.edit { preferences ->
+            preferences[KEY_ADDRESS_ID] = id.toString()
+        }
+    }
+
+    val addressId: Flow<Int>
+        get() = context.dataStore.data.map { preferences ->
+            preferences[KEY_ADDRESS_ID]?.toInt() ?: -1
         }
 }
