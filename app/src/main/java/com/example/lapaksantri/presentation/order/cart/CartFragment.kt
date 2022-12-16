@@ -115,10 +115,19 @@ class CartFragment : Fragment() {
                 } else {
                     binding.shimmerLayoutCart.stopShimmer()
                     binding.shimmerLayoutCart.visibility = View.GONE
+                    cartAdapter.submitList(state.data)
                     if (state.data != null && state.data.isNotEmpty()) {
-                        binding.rvOrder.visibility = View.VISIBLE
-                        binding.scrollView.visibility = View.VISIBLE
-                        cartAdapter.submitList(state.data)
+                        binding.rvOrder.visible()
+                        binding.scrollView.visible()
+                        binding.groupEmpty.gone()
+                    } else {
+                        binding.rvOrder.gone()
+                        binding.scrollView.gone()
+                        binding.groupEmpty.visible()
+
+                        binding.btnOrder.setOnClickListener {
+                            findNavController().navigate(R.id.action_cartFragment_to_addOrderFragment)
+                        }
                     }
                 }
             }

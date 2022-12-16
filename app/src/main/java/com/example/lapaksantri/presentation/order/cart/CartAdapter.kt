@@ -10,7 +10,7 @@ import com.example.lapaksantri.databinding.OrderItemBinding
 import com.example.lapaksantri.domain.entities.Cart
 import com.example.lapaksantri.utils.formatRupiah
 
-class CartAdapter(private val clickListener: (Int, String) -> Unit, private val deleteListener: (Int) -> Unit) : ListAdapter<Cart, CartAdapter.ViewHolder>(DiffCallback) {
+class CartAdapter(private val clickListener: (Int, String) -> Unit, private val deleteListener: (List<Int>) -> Unit) : ListAdapter<Cart, CartAdapter.ViewHolder>(DiffCallback) {
     companion object DiffCallback : DiffUtil.ItemCallback<Cart>() {
         override fun areItemsTheSame(oldItem: Cart, newItem: Cart): Boolean {
             return oldItem.id == newItem.id
@@ -22,7 +22,7 @@ class CartAdapter(private val clickListener: (Int, String) -> Unit, private val 
     }
 
     inner class ViewHolder(private val binding: OrderItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(cart: Cart, listener: (Int, String) -> Unit, deleteListener: (Int) -> Unit) {
+        fun bind(cart: Cart, listener: (Int, String) -> Unit, deleteListener: (List<Int>) -> Unit) {
             with(binding) {
                 Glide.with(itemView.context)
                     .load(cart.imagePath)
@@ -33,7 +33,7 @@ class CartAdapter(private val clickListener: (Int, String) -> Unit, private val 
                 tvQuantity.text = cart.quantity.toString()
 
                 btnDelete.setOnClickListener {
-                    deleteListener(cart.id)
+                    deleteListener(cart.cartId)
                 }
                 btnPlus.setOnClickListener {
                     listener(cart.id, "plus")
