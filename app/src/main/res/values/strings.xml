@@ -48,4 +48,15 @@
     <string name="edit">Ubah</string>
     <string name="add_address">Tambah Alamat</string>
     <string name="shimmer">shimmer</string>
+    <string name="delete_address">Hapus Alamat</string>
+    <string name="save_address">Simpan Alamat</string>
+    <string name="set_main_address">Atur Sebagai Alamat Utama</string>
+    <string name="area">Rumah Kantor lainnya</string>
+    <string name="tandai_sebagai">Tandai Sebagai</string>
+    <string name="phone_number">No Telepon</string>
+    <string name="recipient">Nama Penerima</string>
+    <string name="detail_address">Alamat Lengkap</string>
+    <string name="village">Kelurahan</string>
+    <string name="input_shipping_address">Masukan Alamat Pengiriman</string>
+    <string name="district">Kecamatan</string>
 </resources>

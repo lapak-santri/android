@@ -2,6 +2,7 @@ package com.example.lapaksantri.data.repositories
 
 import com.example.lapaksantri.data.local.data_store.DataStoreManager
 import com.example.lapaksantri.data.remote.network.AddressApiService
+import com.example.lapaksantri.data.remote.request.AddUpdateAddressRequest
 import com.example.lapaksantri.data.remote.response.ErrorResponse
 import com.example.lapaksantri.domain.entities.Address
 import com.example.lapaksantri.domain.repositories.AddressRepository
@@ -92,6 +93,127 @@ class AddressRepositoryImpl @Inject constructor(
                         isMain = it.id == addressId,
                     )
                 }))
+            } else {
+                emit(Resource.Error("Token Not Exist"))
+            }
+        } catch (e: Exception) {
+            when(e) {
+                is HttpException -> {
+                    val errorMessageResponseType = object : TypeToken<ErrorResponse>() {}.type
+                    val error: ErrorResponse = Gson().fromJson(e.response()?.errorBody()?.charStream(), errorMessageResponseType)
+                    emit(Resource.Error(error.errorMessageResponse.message))
+                }
+                else -> {
+                    emit(Resource.Error("An unexpected error occurred"))
+                }
+            }
+        }
+    }
+
+    override fun addAddress(
+        recipient: String,
+        phone: String,
+        village: String,
+        district: String,
+        detailAddress: String,
+        area: String,
+        isMain: Boolean
+    ): Flow<Resource<String>> = flow {
+        emit(Resource.Loading())
+        try {
+            val token = dataStoreManager.token.first()
+            if (token != "") {
+                val response = addressApiService.addAddress(
+                    token = "Bearer $token",
+                    addUpdateAddressRequest = AddUpdateAddressRequest(
+                        recipient = recipient,
+                        phone = phone,
+                        village = village,
+                        district = district,
+                        detailAddress = detailAddress,
+                        area = area
+                    )
+                )
+                if (isMain) {
+                    dataStoreManager.saveAddressId(response.data.id)
+                }
+                emit(Resource.Success(response.status))
+            } else {
+                emit(Resource.Error("Token Not Exist"))
+            }
+        } catch (e: Exception) {
+            when(e) {
+                is HttpException -> {
+                    val errorMessageResponseType = object : TypeToken<ErrorResponse>() {}.type
+                    val error: ErrorResponse = Gson().fromJson(e.response()?.errorBody()?.charStream(), errorMessageResponseType)
+                    emit(Resource.Error(error.errorMessageResponse.message))
+                }
+                else -> {
+                    emit(Resource.Error("An unexpected error occurred"))
+                }
+            }
+        }
+    }
+
+    override fun updateAddress(
+        id: Int,
+        recipient: String,
+        phone: String,
+        village: String,
+        district: String,
+        detailAddress: String,
+        area: String,
+        isMain: Boolean
+    ): Flow<Resource<String>> = flow {
+        emit(Resource.Loading())
+        try {
+            val token = dataStoreManager.token.first()
+            if (token != "") {
+                val response = addressApiService.updateAddress(
+                    token = "Bearer $token",
+                    addressId = id,
+                    addUpdateAddressRequest = AddUpdateAddressRequest(
+                        recipient = recipient,
+                        phone = phone,
+                        village = village,
+                        district = district,
+                        detailAddress = detailAddress,
+                        area = area
+                    )
+                )
+                if (isMain) {
+                    dataStoreManager.saveAddressId(response.data[0].id)
+                } else {
+                    dataStoreManager.saveAddressId(-1)
+                }
+                emit(Resource.Success(response.message))
+            } else {
+                emit(Resource.Error("Token Not Exist"))
+            }
+        } catch (e: Exception) {
+            when(e) {
+                is HttpException -> {
+                    val errorMessageResponseType = object : TypeToken<ErrorResponse>() {}.type
+                    val error: ErrorResponse = Gson().fromJson(e.response()?.errorBody()?.charStream(), errorMessageResponseType)
+                    emit(Resource.Error(error.errorMessageResponse.message))
+                }
+                else -> {
+                    emit(Resource.Error("An unexpected error occurred"))
+                }
+            }
+        }
+    }
+
+    override fun deleteAddress(id: Int): Flow<Resource<String>> = flow {
+        emit(Resource.Loading())
+        try {
+            val token = dataStoreManager.token.first()
+            if (token != "") {
+                val response = addressApiService.deleteAddress(
+                    token = "Bearer $token",
+                    addressId = id,
+                )
+                emit(Resource.Success(response.message))
             } else {
                 emit(Resource.Error("Token Not Exist"))
             }
