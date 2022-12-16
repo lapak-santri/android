@@ -6,6 +6,7 @@ import com.example.lapaksantri.domain.entities.Article
 import com.example.lapaksantri.domain.entities.Slider
 import com.example.lapaksantri.domain.usecases.article.GetArticlesUseCase
 import com.example.lapaksantri.domain.usecases.auth.GetNameUseCase
+import com.example.lapaksantri.domain.usecases.order.GetCartsUseCase
 import com.example.lapaksantri.domain.usecases.slider.GetSlidersUseCase
 import com.example.lapaksantri.utils.Resource
 import com.example.lapaksantri.utils.UIState
@@ -20,6 +21,7 @@ class HomeViewModel @Inject constructor(
     getSlidersUseCase: GetSlidersUseCase,
     getArticlesUseCase: GetArticlesUseCase,
     getNameUseCase: GetNameUseCase,
+    private val getCartsUseCase: GetCartsUseCase,
 ) : ViewModel() {
     private val _articles = MutableStateFlow<UIState<List<Article>>>(UIState())
     val articles = _articles.asStateFlow()
@@ -32,18 +34,13 @@ class HomeViewModel @Inject constructor(
 
     private val _errorSnackbar = MutableSharedFlow<String>()
     val errorSnackbar = _errorSnackbar.asSharedFlow()
-//
-//    private val _name = MutableStateFlow<Resource<User>>(Resource.NoEvent())
-//    val name = _name.asStateFlow()
-//
-//    private var _carts = MutableStateFlow<Resource<List<Cart>>>(Resource.NoEvent())
-//    val carts: StateFlow<Resource<List<Cart>>> = _carts
+
+    private var _cartCount = MutableStateFlow<UIState<Int>>(UIState())
+    val cartCount: StateFlow<UIState<Int>> = _cartCount
 
     init {
+        getCartCount()
         viewModelScope.launch {
-//            getArticlesUseCase().collect {
-//                _articles.value = it
-//            }
             getSlidersUseCase().onEach { result ->
                 when(result) {
                     is Resource.Success -> {
@@ -114,7 +111,6 @@ class HomeViewModel @Inject constructor(
                 }
             }.launchIn(viewModelScope)
         }
-//        getCartCount()
     }
 
     fun getTime(): String {
@@ -133,5 +129,31 @@ class HomeViewModel @Inject constructor(
                 "Selamat Malam"
             }
         }
+    }
+
+    fun getCartCount() {
+        getCartsUseCase().onEach { result ->
+            when(result) {
+                is Resource.Success -> {
+                    _cartCount.value = _cartCount.value.copy(
+                        data = result.data?.size,
+                        isLoading = false
+                    )
+                }
+                is Resource.Error -> {
+                    _cartCount.value = _cartCount.value.copy(
+                        data = 0,
+                        isLoading = false
+                    )
+                    _errorSnackbar.emit(result.message.toString())
+                }
+                is Resource.Loading -> {
+                    _cartCount.value = _cartCount.value.copy(
+                        data = 0,
+                        isLoading = true
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 }

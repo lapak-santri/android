@@ -103,7 +103,7 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun deleteCart(cartId: Int) {
+    fun deleteCart(cartId: List<Int>) {
         viewModelScope.launch {
             deleteCartUseCase(cartId).collect {
                 _deleteResult.emit(it)
