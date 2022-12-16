@@ -91,6 +91,7 @@ class CartFragment : Fragment() {
         observeUpdateResult()
         observeDeleteResult()
         observeTotalPrice()
+        observeAddTransactionResult()
     }
 
     private fun observeErrorSnackbar() {
@@ -155,14 +156,10 @@ class CartFragment : Fragment() {
                         )
 
                         binding.btnConfirmationOrder.setOnClickListener {
-
+                            viewModel.addTransaction()
                         }
                     } else {
                         binding.tvSelectAddress.visibility = View.VISIBLE
-
-                        binding.btnConfirmationOrder.setOnClickListener {
-                            showErrorSnackbar(binding.root, "Pilih Alamat Anda Terlebih Dahulu")
-                        }
                     }
 
                     binding.btnSelectAddress.setOnClickListener {
@@ -209,6 +206,30 @@ class CartFragment : Fragment() {
                     is Resource.Success -> {
                         loadingDialog.dismiss()
                         viewModel.getCart()
+                    }
+                }
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun observeAddTransactionResult() {
+        viewModel.addTransactionResult
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach { result ->
+                when(result) {
+                    is Resource.Error -> {
+                        loadingDialog.dismiss()
+                        showErrorSnackbar(binding.root, result.message.toString())
+                    }
+                    is Resource.Loading -> {
+                        loadingDialog.show()
+                    }
+                    is Resource.Success -> {
+                        loadingDialog.dismiss()
+                        result.data?.let {
+                            val action = CartFragmentDirections.actionCartFragmentToOrderDetailFragment(it)
+                            findNavController().navigate(action)
+                        }
                     }
                 }
             }

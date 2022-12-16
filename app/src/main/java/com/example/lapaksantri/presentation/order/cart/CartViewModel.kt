@@ -4,7 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.lapaksantri.domain.entities.Address
 import com.example.lapaksantri.domain.entities.Cart
+import com.example.lapaksantri.domain.entities.Transaction
 import com.example.lapaksantri.domain.usecases.address.GetMainAddressUseCase
+import com.example.lapaksantri.domain.usecases.order.AddTransactionUseCase
 import com.example.lapaksantri.domain.usecases.order.DeleteCartUseCase
 import com.example.lapaksantri.domain.usecases.order.GetCartsUseCase
 import com.example.lapaksantri.domain.usecases.order.UpdateCartUseCase
@@ -20,7 +22,8 @@ class CartViewModel @Inject constructor(
     private val getCartsUseCase: GetCartsUseCase,
     getMainAddressUseCase: GetMainAddressUseCase,
     private val updateCartUseCase: UpdateCartUseCase,
-    private val deleteCartUseCase: DeleteCartUseCase
+    private val deleteCartUseCase: DeleteCartUseCase,
+    private val addTransactionUseCase: AddTransactionUseCase
 ) : ViewModel() {
     private val _carts = MutableStateFlow<UIState<List<Cart>>>(UIState())
     val carts =  _carts.asStateFlow()
@@ -36,6 +39,9 @@ class CartViewModel @Inject constructor(
 
     private val _deleteResult = MutableSharedFlow<Resource<String>>()
     val deleteResult = _deleteResult.asSharedFlow()
+
+    private val _addTransactionResult = MutableSharedFlow<Resource<Transaction>>()
+    val addTransactionResult = _addTransactionResult.asSharedFlow()
 
     private var _totalPrice = MutableStateFlow(0.0)
     val totalPrice: StateFlow<Double> = _totalPrice
@@ -117,5 +123,20 @@ class CartViewModel @Inject constructor(
             totalPrice += (it.quantity * it.price)
         }
         _totalPrice.value = totalPrice
+    }
+
+    fun addTransaction() {
+        viewModelScope.launch {
+            _address.value.data?.let { address ->
+                addTransactionUseCase(
+                    address,
+                    _totalPrice.value.toInt()
+                ).collect {
+                    _addTransactionResult.emit(it)
+                }
+            } ?: kotlin.run {
+                _errorSnackbar.emit("Pilih Alamat Terlebih Dahulu")
+            }
+        }
     }
 }
