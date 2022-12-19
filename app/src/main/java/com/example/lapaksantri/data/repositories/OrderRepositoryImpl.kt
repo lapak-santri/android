@@ -1,5 +1,6 @@
 package com.example.lapaksantri.data.repositories
 
+import android.util.Log
 import com.example.lapaksantri.data.local.data_store.DataStoreManager
 import com.example.lapaksantri.data.remote.network.OrderApiService
 import com.example.lapaksantri.data.remote.request.AddCartRequest
@@ -223,7 +224,7 @@ class OrderRepositoryImpl @Inject constructor(
                     token = "Bearer $token",
                     addTransactionRequest = AddTransactionRequest(
                         transactionCode = transactionCode,
-                        invoice = "SANTRI-${transactionCode.substring(0,4)}",
+                        invoice = "SANTRI-${transactionCode.substring(transactionCode.length-6, transactionCode.length-1)}",
                         address = address.detailAddress,
                         district = address.district,
                         village = address.village,
@@ -235,25 +236,39 @@ class OrderRepositoryImpl @Inject constructor(
                     )
                 )
 
-                val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale("in", "ID"))
-                val dateFormatted = dateTimeFormatter.parse(response.transactionResponse.createdAt)
-                val calender = Calendar.getInstance()
-                calender.time = dateFormatted
-                calender.add(Calendar.DAY_OF_MONTH, 2)
-                val sendAt = dateTimeFormatter.format(calender.time)
+                val transactionResponse = response.transactionResponse
 
+                val transactionCarts = arrayListOf<Cart>()
+                transactionResponse.details.forEachIndexed { index, cartResponse ->
+                    val indexCart = transactionCarts.indices.find { cartResponse.name == transactionCarts[it].name }
+                    if (indexCart == -1 || indexCart == null) {
+                        transactionCarts.add(
+                            Cart(
+                                id = index,
+                                name = cartResponse.name,
+                                price = cartResponse.price.toDouble(),
+                                imagePath = "",
+                                quantity = cartResponse.quantity,
+                                cartId = arrayListOf(0)
+                            )
+                        )
+                    } else {
+                        transactionCarts[index].quantity += cartResponse.quantity
+                    }
+                }
                 emit(Resource.Success(
                     Transaction(
-                    id = response.transactionResponse.id,
-                    priceTotal = response.transactionResponse.grossAmount,
-                    name = response.transactionResponse.name,
-                    invoice = response.transactionResponse.invoice,
-                    districtName = response.transactionResponse.district,
-                    address = response.transactionResponse.address,
-                    midtransUrl = response.transactionResponse.redirectUrl,
-                    createdAt = response.transactionResponse.createdAt,
-                        sendAt = sendAt
-                )
+                        id = transactionResponse.id,
+                        priceTotal = transactionResponse.grossAmount,
+                        name = transactionResponse.name,
+                        invoice = transactionResponse.invoice,
+                        districtName = transactionResponse.district,
+                        address = transactionResponse.address,
+                        midtransUrl = transactionResponse.redirectUrl,
+                        createdAt = transactionResponse.createdAt,
+                        sendAt = transactionResponse.createdAt,
+                        carts = transactionCarts,
+                    )
                 ))
             } else {
                 emit(Resource.Error("Token Not Exist"))
@@ -281,25 +296,45 @@ class OrderRepositoryImpl @Inject constructor(
                     token = "Bearer $token",
                 )
 
-                emit(Resource.Success(response.data.data.map {
+                emit(Resource.Success(response.data.data.map { transactionResponse ->
 
-                    val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'", Locale("in", "ID"))
-                    val dateFormatted = dateTimeFormatter.parse(it.createdAt)
+                    val dateTimeFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+                    val dateFormatted = dateTimeFormatter.parse(transactionResponse.createdAt)
                     val calender = Calendar.getInstance()
                     calender.time = dateFormatted
                     calender.add(Calendar.DAY_OF_MONTH, 2)
                     val sendAt = dateTimeFormatter.format(calender.time)
 
+                    val carts = arrayListOf<Cart>()
+                    transactionResponse.details.forEachIndexed { index, cartResponse ->
+                        val indexCart = carts.indices.find { cartResponse.name == carts[it].name }
+                        if (indexCart == -1 || indexCart == null) {
+                            carts.add(
+                                Cart(
+                                    id = index,
+                                    name = cartResponse.name,
+                                    price = cartResponse.price.toDouble(),
+                                    imagePath = "",
+                                    quantity = cartResponse.quantity,
+                                    cartId = arrayListOf(0)
+                                )
+                            )
+                        } else {
+                            carts[index].quantity += cartResponse.quantity
+                        }
+                    }
+
                     Transaction(
-                        id = it.id,
-                        priceTotal = it.grossAmount,
-                        name = it.name,
-                        invoice = it.invoice,
-                        districtName = it.district,
-                        address = it.address,
-                        midtransUrl = it.redirectUrl,
-                        createdAt = it.createdAt,
-                        sendAt = sendAt
+                        id = transactionResponse.id,
+                        priceTotal = transactionResponse.grossAmount,
+                        name = transactionResponse.name,
+                        invoice = transactionResponse.invoice,
+                        districtName = transactionResponse.district,
+                        address = transactionResponse.address,
+                        midtransUrl = transactionResponse.redirectUrl,
+                        createdAt = transactionResponse.createdAt,
+                        sendAt = transactionResponse.createdAt,
+                        carts = carts,
                     )
                 }))
             } else {

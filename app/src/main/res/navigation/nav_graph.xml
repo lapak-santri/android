@@ -148,5 +148,17 @@
         <argument
             android:name="transaction"
             app:argType="com.example.lapaksantri.domain.entities.Transaction" />
+        <action
+            android:id="@+id/action_orderDetailFragment_to_paymentFragment"
+            app:destination="@id/paymentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.example.lapaksantri.presentation.order.payment.PaymentFragment"
+        android:label="fragment_payment"
+        tools:layout="@layout/fragment_payment" >
+        <argument
+            android:name="midtransUrl"
+            app:argType="string" />
     </fragment>
 </navigation>
