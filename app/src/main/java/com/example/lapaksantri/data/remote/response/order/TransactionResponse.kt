@@ -33,5 +33,7 @@ data class TransactionResponse(
     @SerializedName("updatedAt")
     val updatedAt: String,
     @SerializedName("village")
-    val village: String
+    val village: String,
+    @SerializedName("details")
+    val details: List<DetailTransactionResponse>
 )

@@ -5,5 +5,5 @@ object Constants {
     const val TOKEN = "token"
     const val NAME = "name"
     const val ADDRESS_ID = "address_id"
-    const val BASE_URL = "http://10.0.2.2:8000/api/v1/"
+    const val BASE_URL = "https://lapak-santri.glitch.me/api/v1/"
 }
