@@ -3,11 +3,13 @@ package com.example.lapaksantri.data.remote.network
 import com.example.lapaksantri.data.remote.request.AddCartRequest
 import com.example.lapaksantri.data.remote.request.AddTransactionRequest
 import com.example.lapaksantri.data.remote.request.UpdateCartRequest
+import com.example.lapaksantri.data.remote.response.TransactionStatusResponse
 import com.example.lapaksantri.data.remote.response.cart.AddUpdateCartResponse
 import com.example.lapaksantri.data.remote.response.cart.GetCartsResponse
 import com.example.lapaksantri.data.remote.response.order.AddTransactionResponse
 import com.example.lapaksantri.data.remote.response.order.GetTransactionsResponse
 import com.example.lapaksantri.data.remote.response.product.GetProductsResponse
+import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -15,6 +17,7 @@ import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
+import retrofit2.http.Url
 
 interface OrderApiService {
     @GET("product")
@@ -53,4 +56,10 @@ interface OrderApiService {
     suspend fun getTransactions(
         @Header("Authorization") token: String,
     ): GetTransactionsResponse
+
+    @GET
+    suspend fun getTransactionStatus(
+        @Url url: String,
+        @Header("Authorization") token: String = "Basic U0ItTWlkLXNlcnZlci0zV2hyWVdXWlBuX0ZYd3FOdTJPOU5PbjU6",
+    ): TransactionStatusResponse
 }

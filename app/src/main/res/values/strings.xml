@@ -66,4 +66,7 @@
     <string name="shipping_date">Tanggal Pengiriman : %s</string>
     <string name="pay_now">Bayar Sekarang</string>
     <string name="detail_order">Detail Order</string>
+    <string name="already_paid">Sudah Dibayar</string>
+    <string name="history_order">Riwayat Pesanan</string>
+    <string name="order_failed">Order Gagal</string>
 </resources>

@@ -13,12 +13,12 @@
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
             app:destination="@id/loginFragment"
-            app:popUpTo="@id/nav_graph"
+            app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_splashFragment_to_homeFragment"
             app:destination="@id/homeFragment"
-            app:popUpTo="@id/nav_graph"
+            app:popUpTo="@id/splashFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
@@ -74,6 +74,9 @@
         <action
             android:id="@+id/action_profileFragment_to_logoutFragment"
             app:destination="@id/logoutFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_historyOrderFragment"
+            app:destination="@id/historyOrderFragment" />
     </fragment>
     <dialog
         android:id="@+id/logoutFragment"
@@ -160,5 +163,14 @@
         <argument
             android:name="midtransUrl"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/historyOrderFragment"
+        android:name="com.example.lapaksantri.presentation.order.history_order.HistoryOrderFragment"
+        android:label="fragment_history_order"
+        tools:layout="@layout/fragment_history_order" >
+        <action
+            android:id="@+id/action_historyOrderFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
     </fragment>
 </navigation>

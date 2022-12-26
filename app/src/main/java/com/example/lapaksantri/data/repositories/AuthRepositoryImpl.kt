@@ -120,6 +120,7 @@ class AuthRepositoryImpl(
         try {
             dataStoreManager.saveToken("")
             dataStoreManager.saveName("")
+            dataStoreManager.saveAddressId(-1)
             emit(Resource.Success(true))
         } catch (e: Exception) {
             emit(Resource.Error("An unexpected error occurred", false))

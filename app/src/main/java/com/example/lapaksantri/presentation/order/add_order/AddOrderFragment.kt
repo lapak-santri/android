@@ -40,11 +40,6 @@ class AddOrderFragment : Fragment() {
         return  binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.getProducts()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadingDialog = createLoadingDialog(requireContext(), layoutInflater)
@@ -114,6 +109,7 @@ class AddOrderFragment : Fragment() {
                         loadingDialog.show()
                     }
                     is Resource.Success -> {
+                        viewModel.getProducts()
                         loadingDialog.dismiss()
                         findNavController().navigate(R.id.action_addOrderFragment_to_cartFragment)
                     }

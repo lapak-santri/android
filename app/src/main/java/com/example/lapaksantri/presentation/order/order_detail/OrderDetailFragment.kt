@@ -12,6 +12,7 @@ import com.example.lapaksantri.R
 import com.example.lapaksantri.databinding.FragmentOrderDetailBinding
 import com.example.lapaksantri.utils.formatDate
 import com.example.lapaksantri.utils.formatRupiah
+import com.example.lapaksantri.utils.gone
 
 class OrderDetailFragment : Fragment() {
     private var _binding: FragmentOrderDetailBinding? = null
@@ -29,6 +30,28 @@ class OrderDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<String>("key")?.observe(
+            viewLifecycleOwner) { result ->
+
+            if (result == "success") {
+                findNavController().previousBackStackEntry?.savedStateHandle?.set("key", "success")
+                binding.constraintLayoutStatus.setBackgroundResource(R.drawable.already_paid_order_bg)
+                binding.ivStatus.setImageResource(R.drawable.ic_already_paid)
+                binding.tvStatus.text = requireContext().getString(R.string.already_paid)
+                binding.btnPayNow.gone()
+            }
+        }
+
+        if (args.transaction.status == "success") {
+            binding.constraintLayoutStatus.setBackgroundResource(R.drawable.already_paid_order_bg)
+            binding.ivStatus.setImageResource(R.drawable.ic_already_paid)
+            binding.tvStatus.text = requireContext().getString(R.string.already_paid)
+        }
+        if (args.transaction.status == "failed") {
+            binding.ivStatus.setImageResource(R.drawable.ic_error)
+            binding.tvStatus.text = requireContext().getString(R.string.order_failed)
+        }
+
         detailOrderAdapter = DetailOrderAdapter()
         binding.rvDetail.layoutManager = LinearLayoutManager(context)
         binding.rvDetail.adapter = detailOrderAdapter
@@ -45,9 +68,14 @@ class OrderDetailFragment : Fragment() {
         binding.tvSendDate.text = requireContext().getString(R.string.shipping_date, sendDate)
         binding.tvTotalPrice.text = formatRupiah(args.transaction.priceTotal.toDouble())
 
-        binding.btnPayNow.setOnClickListener {
-            val action = OrderDetailFragmentDirections.actionOrderDetailFragmentToPaymentFragment(args.transaction.midtransUrl)
-            findNavController().navigate(action)
+        if (args.transaction.status == "") {
+            binding.btnPayNow.setOnClickListener {
+                val action =
+                    OrderDetailFragmentDirections.actionOrderDetailFragmentToPaymentFragment(args.transaction.midtransUrl)
+                findNavController().navigate(action)
+            }
+        } else {
+            binding.btnPayNow.gone()
         }
     }
 

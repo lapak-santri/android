@@ -20,6 +20,7 @@ import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.util.*
@@ -43,6 +44,9 @@ class CartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         loadingDialog = createLoadingDialog(requireContext(), layoutInflater)
+        binding.btnBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         binding.tvDelivery.text = formatRupiah(0.0)
 
@@ -183,8 +187,9 @@ class CartFragment : Fragment() {
                         loadingDialog.show()
                     }
                     is Resource.Success -> {
-                        loadingDialog.dismiss()
                         viewModel.getCart()
+                        delay(500)
+                        loadingDialog.dismiss()
                     }
                 }
             }
@@ -204,8 +209,9 @@ class CartFragment : Fragment() {
                         loadingDialog.show()
                     }
                     is Resource.Success -> {
-                        loadingDialog.dismiss()
                         viewModel.getCart()
+                        delay(500)
+                        loadingDialog.dismiss()
                     }
                 }
             }
@@ -225,6 +231,7 @@ class CartFragment : Fragment() {
                         loadingDialog.show()
                     }
                     is Resource.Success -> {
+                        viewModel.getCart()
                         loadingDialog.dismiss()
                         result.data?.let {
                             val action = CartFragmentDirections.actionCartFragmentToOrderDetailFragment(it)

@@ -33,7 +33,8 @@ class PaymentFragment : Fragment() {
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
                 url?.let {
-                    if (it.contains("example")) {
+                    if (it.contains("settlement") || it.contains("capture")) {
+                        findNavController().previousBackStackEntry?.savedStateHandle?.set("key", "success")
                         findNavController().navigateUp()
                     }
                 }

@@ -40,6 +40,10 @@ class ProfileFragment : Fragment() {
             findNavController().navigate(R.id.action_profileFragment_to_logoutFragment)
         }
 
+        binding.linearLayoutHistory.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_historyOrderFragment)
+        }
+
         observeErrorSnackbar()
         observeUser()
     }
