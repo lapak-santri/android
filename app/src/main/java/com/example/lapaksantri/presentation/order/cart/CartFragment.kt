@@ -59,6 +59,10 @@ class CartFragment : Fragment() {
             }
         )
 
+        binding.btnConfirmationOrder.setOnClickListener {
+            viewModel.addTransaction()
+        }
+
 //        val gc = GregorianCalendar()
 //        val nowInMillis = gc.timeInMillis
 //
@@ -158,10 +162,6 @@ class CartFragment : Fragment() {
                             mainAddress.area,
                             mainAddress.phone.replace("+62", "0")
                         )
-
-                        binding.btnConfirmationOrder.setOnClickListener {
-                            viewModel.addTransaction()
-                        }
                     } else {
                         binding.tvSelectAddress.visibility = View.VISIBLE
                     }
@@ -210,6 +210,7 @@ class CartFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         viewModel.getCart()
+                        cartAdapter.notifyItemRangeRemoved(0, cartAdapter.itemCount)
                         delay(500)
                         loadingDialog.dismiss()
                     }
