@@ -38,11 +38,7 @@ class ArticleFragment : Fragment() {
                 .into(ivThumbnail)
             tvTitle.text = args.article.title
             tvDate.text = formatDate(args.article.publishedAt)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                tvDesc.text = Html.fromHtml(args.article.description, Html.FROM_HTML_MODE_LEGACY)
-            } else {
-                tvDesc.text = Html.fromHtml(args.article.description)
-            }
+            tvDesc.text = args.article.description
         }
     }
 
