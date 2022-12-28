@@ -8,7 +8,6 @@ import com.example.lapaksantri.data.remote.request.AddTransactionRequest
 import com.example.lapaksantri.data.remote.request.DetailRequest
 import com.example.lapaksantri.data.remote.request.UpdateCartRequest
 import com.example.lapaksantri.data.remote.response.ErrorResponse
-import com.example.lapaksantri.data.remote.response.TransactionStatusResponse
 import com.example.lapaksantri.domain.entities.Address
 import com.example.lapaksantri.domain.entities.Cart
 import com.example.lapaksantri.domain.entities.Product
@@ -20,10 +19,7 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.HttpException
-import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -270,7 +266,7 @@ class OrderRepositoryImpl @Inject constructor(
                                 )
                             )
                         } else {
-                            transactionCarts[index].quantity += cartResponse.quantity
+                            transactionCarts[indexCart].quantity += cartResponse.quantity
                         }
                     }
                     emit(
@@ -349,7 +345,7 @@ class OrderRepositoryImpl @Inject constructor(
                                 )
                             )
                         } else {
-                            carts[index].quantity += cartResponse.quantity
+                            carts[indexCart].quantity += cartResponse.quantity
                         }
                     }
 
@@ -378,7 +374,6 @@ class OrderRepositoryImpl @Inject constructor(
                     emit(Resource.Error(error.errorMessageResponse.message))
                 }
                 else -> {
-                    Log.d("STATUS", e.message.toString())
                     emit(Resource.Error("An unexpected error occurred"))
                 }
             }

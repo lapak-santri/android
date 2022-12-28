@@ -110,6 +110,7 @@ class AddOrderFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         viewModel.getProducts()
+                        viewModel.clearCarts()
                         loadingDialog.dismiss()
                         findNavController().navigate(R.id.action_addOrderFragment_to_cartFragment)
                     }
