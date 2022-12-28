@@ -325,6 +325,7 @@
                 android:layout_marginBottom="@dimen/_13sdp"
                 android:background="@drawable/detail_order_bg"
                 android:padding="@dimen/_13sdp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/textView22"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -480,6 +481,7 @@
                 android:text="@string/shipping"
                 android:textColor="@color/black"
                 android:textSize="@dimen/_13ssp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayoutDate"
                 app:layout_constraintStart_toStartOf="parent" />
 

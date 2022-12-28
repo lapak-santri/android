@@ -59,35 +59,35 @@ class CartFragment : Fragment() {
             }
         )
 
-        val gc = GregorianCalendar()
-        val nowInMillis = gc.timeInMillis
-
-        gc.add(Calendar.DATE, 1)
-        val tomorrowInMillis = gc.timeInMillis
-
-        binding.tvDate.text = formatDatePicker(tomorrowInMillis)
-
-        val constraintsBuilder = CalendarConstraints.Builder()
-            .setStart(tomorrowInMillis)
-            .setValidator(DateValidatorPointForward.from(nowInMillis))
-            .build()
-
-        val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Pilih Tanggal Pengiriman")
-            .setCalendarConstraints(constraintsBuilder)
-            .setSelection(tomorrowInMillis)
-            .build()
-
-        binding.linearLayoutDate.setOnClickListener {
-            val datePickerFragment = childFragmentManager.findFragmentByTag("DATE PICKER")
-            if (datePickerFragment == null) {
-                datePicker.show(childFragmentManager, "DATE PICKER")
-            }
-        }
-
-        datePicker.addOnPositiveButtonClickListener {
-            binding.tvDate.text = formatDatePicker(it)
-        }
+//        val gc = GregorianCalendar()
+//        val nowInMillis = gc.timeInMillis
+//
+//        gc.add(Calendar.DATE, 1)
+//        val tomorrowInMillis = gc.timeInMillis
+//
+//        binding.tvDate.text = formatDatePicker(tomorrowInMillis)
+//
+//        val constraintsBuilder = CalendarConstraints.Builder()
+//            .setStart(tomorrowInMillis)
+//            .setValidator(DateValidatorPointForward.from(nowInMillis))
+//            .build()
+//
+//        val datePicker = MaterialDatePicker.Builder.datePicker()
+//            .setTitleText("Pilih Tanggal Pengiriman")
+//            .setCalendarConstraints(constraintsBuilder)
+//            .setSelection(tomorrowInMillis)
+//            .build()
+//
+//        binding.linearLayoutDate.setOnClickListener {
+//            val datePickerFragment = childFragmentManager.findFragmentByTag("DATE PICKER")
+//            if (datePickerFragment == null) {
+//                datePicker.show(childFragmentManager, "DATE PICKER")
+//            }
+//        }
+//
+//        datePicker.addOnPositiveButtonClickListener {
+//            binding.tvDate.text = formatDatePicker(it)
+//        }
 
         observeErrorSnackbar()
         observeCart()
