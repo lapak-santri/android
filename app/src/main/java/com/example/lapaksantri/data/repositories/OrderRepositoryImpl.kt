@@ -220,60 +220,76 @@ class OrderRepositoryImpl @Inject constructor(
                         )
                     )
                 }
-                val transactionCode = SimpleDateFormat(
-                    "yyyyMMddHHmmss",
-                    Locale("in", "ID"),
-                ).format(Date())
-                val response = orderApiService.addTransaction(
-                    token = "Bearer $token",
-                    addTransactionRequest = AddTransactionRequest(
-                        transactionCode = transactionCode,
-                        invoice = "SANTRI-${transactionCode.substring(transactionCode.length-6, transactionCode.length-1)}",
-                        address = address.detailAddress,
-                        district = address.district,
-                        village = address.village,
-                        name = name,
-                        email = email,
-                        phone = address.phone,
-                        grossAmount = totalPrice,
-                        detailRequest = detailRequests,
+                var totalQuantity = 0
+                detailRequests.forEach {
+                    totalQuantity += it.quantity
+                }
+                if (totalQuantity < 5) {
+                    emit(Resource.Error("Pembelian Minimal 5 Item"))
+                } else {
+                    val transactionCode = SimpleDateFormat(
+                        "yyyyMMddHHmmss",
+                        Locale("in", "ID"),
+                    ).format(Date())
+                    val response = orderApiService.addTransaction(
+                        token = "Bearer $token",
+                        addTransactionRequest = AddTransactionRequest(
+                            transactionCode = transactionCode,
+                            invoice = "SANTRI-${
+                                transactionCode.substring(
+                                    transactionCode.length - 6,
+                                    transactionCode.length - 1
+                                )
+                            }",
+                            address = address.detailAddress,
+                            district = address.district,
+                            village = address.village,
+                            name = name,
+                            email = email,
+                            phone = address.phone,
+                            grossAmount = totalPrice,
+                            detailRequest = detailRequests,
+                        )
                     )
-                )
 
-                val transactionResponse = response.transactionResponse
+                    val transactionResponse = response.transactionResponse
 
-                val transactionCarts = arrayListOf<Cart>()
-                transactionResponse.details.forEachIndexed { index, cartResponse ->
-                    val indexCart = transactionCarts.indices.find { cartResponse.name == transactionCarts[it].name }
-                    if (indexCart == -1 || indexCart == null) {
-                        transactionCarts.add(
-                            Cart(
-                                id = index,
-                                name = cartResponse.name,
-                                price = cartResponse.price.toDouble(),
-                                imagePath = "",
-                                quantity = cartResponse.quantity,
-                                cartId = arrayListOf(0)
+                    val transactionCarts = arrayListOf<Cart>()
+                    transactionResponse.details.forEachIndexed { index, cartResponse ->
+                        val indexCart =
+                            transactionCarts.indices.find { cartResponse.name == transactionCarts[it].name }
+                        if (indexCart == -1 || indexCart == null) {
+                            transactionCarts.add(
+                                Cart(
+                                    id = index,
+                                    name = cartResponse.name,
+                                    price = cartResponse.price.toDouble(),
+                                    imagePath = "",
+                                    quantity = cartResponse.quantity,
+                                    cartId = arrayListOf(0)
+                                )
+                            )
+                        } else {
+                            transactionCarts[index].quantity += cartResponse.quantity
+                        }
+                    }
+                    emit(
+                        Resource.Success(
+                            Transaction(
+                                id = transactionResponse.id,
+                                priceTotal = transactionResponse.grossAmount,
+                                name = transactionResponse.name,
+                                invoice = transactionResponse.invoice,
+                                districtName = transactionResponse.district,
+                                address = transactionResponse.address,
+                                midtransUrl = transactionResponse.redirectUrl,
+                                createdAt = transactionResponse.createdAt,
+                                sendAt = transactionResponse.createdAt,
+                                carts = transactionCarts,
                             )
                         )
-                    } else {
-                        transactionCarts[index].quantity += cartResponse.quantity
-                    }
-                }
-                emit(Resource.Success(
-                    Transaction(
-                        id = transactionResponse.id,
-                        priceTotal = transactionResponse.grossAmount,
-                        name = transactionResponse.name,
-                        invoice = transactionResponse.invoice,
-                        districtName = transactionResponse.district,
-                        address = transactionResponse.address,
-                        midtransUrl = transactionResponse.redirectUrl,
-                        createdAt = transactionResponse.createdAt,
-                        sendAt = transactionResponse.createdAt,
-                        carts = transactionCarts,
                     )
-                ))
+                }
             } else {
                 emit(Resource.Error("Token Not Exist"))
             }

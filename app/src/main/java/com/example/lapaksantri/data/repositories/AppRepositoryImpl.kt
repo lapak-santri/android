@@ -8,6 +8,7 @@ import com.example.lapaksantri.utils.Resource
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.example.lapaksantri.domain.entities.Slider
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -19,7 +20,7 @@ class AppRepositoryImpl @Inject constructor(
     override fun getSliders(): Flow<Resource<List<Slider>>> = flow {
         emit(Resource.Loading())
         try {
-          val response = appApiService.getSliders()
+            val response = appApiService.getSliders()
             emit(Resource.Success(response.dataSliderResponse.data.map {
                 Slider(
                     id = it.id,

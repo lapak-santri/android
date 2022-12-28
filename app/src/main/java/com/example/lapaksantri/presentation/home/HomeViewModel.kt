@@ -11,6 +11,7 @@ import com.example.lapaksantri.domain.usecases.slider.GetSlidersUseCase
 import com.example.lapaksantri.utils.Resource
 import com.example.lapaksantri.utils.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.util.*
@@ -39,78 +40,76 @@ class HomeViewModel @Inject constructor(
     val cartCount: StateFlow<UIState<Int>> = _cartCount
 
     init {
+        getSlidersUseCase().onEach { result ->
+            when(result) {
+                is Resource.Success -> {
+                    _sliders.value = _sliders.value.copy(
+                        data = result.data,
+                        isLoading = false
+                    )
+                }
+                is Resource.Error -> {
+                    _sliders.value = _sliders.value.copy(
+                        data = result.data,
+                        isLoading = false
+                    )
+                    _errorSnackbar.emit(result.message.toString())
+                }
+                is Resource.Loading -> {
+                    _sliders.value = _sliders.value.copy(
+                        data = result.data,
+                        isLoading = true
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+        getArticlesUseCase().onEach { result ->
+            when(result) {
+                is Resource.Success -> {
+                    _articles.value = _articles.value.copy(
+                        data = result.data,
+                        isLoading = false
+                    )
+                }
+                is Resource.Error -> {
+                    _articles.value = _articles.value.copy(
+                        data = result.data,
+                        isLoading = false
+                    )
+                    _errorSnackbar.emit(result.message.toString())
+                }
+                is Resource.Loading -> {
+                    _articles.value = _articles.value.copy(
+                        data = result.data,
+                        isLoading = true
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+        getNameUseCase().onEach { result ->
+            when(result) {
+                is Resource.Success -> {
+                    _name.value = _name.value.copy(
+                        data = result.data,
+                        isLoading = false
+                    )
+                }
+                is Resource.Error -> {
+                    _name.value = _name.value.copy(
+                        data = result.data,
+                        isLoading = false
+                    )
+                    _errorSnackbar.emit(result.message.toString())
+                }
+                is Resource.Loading -> {
+                    _name.value = _name.value.copy(
+                        data = result.data,
+                        isLoading = true
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
         getCartCount()
-        viewModelScope.launch {
-            getSlidersUseCase().onEach { result ->
-                when(result) {
-                    is Resource.Success -> {
-                        _sliders.value = _sliders.value.copy(
-                            data = result.data,
-                            isLoading = false
-                        )
-                    }
-                    is Resource.Error -> {
-                        _sliders.value = _sliders.value.copy(
-                            data = result.data,
-                            isLoading = false
-                        )
-                        _errorSnackbar.emit(result.message.toString())
-                    }
-                    is Resource.Loading -> {
-                        _sliders.value = _sliders.value.copy(
-                            data = result.data,
-                            isLoading = true
-                        )
-                    }
-                }
-            }.launchIn(viewModelScope)
-            getArticlesUseCase().onEach { result ->
-                when(result) {
-                    is Resource.Success -> {
-                        _articles.value = _articles.value.copy(
-                            data = result.data,
-                            isLoading = false
-                        )
-                    }
-                    is Resource.Error -> {
-                        _articles.value = _articles.value.copy(
-                            data = result.data,
-                            isLoading = false
-                        )
-                        _errorSnackbar.emit(result.message.toString())
-                    }
-                    is Resource.Loading -> {
-                        _articles.value = _articles.value.copy(
-                            data = result.data,
-                            isLoading = true
-                        )
-                    }
-                }
-            }.launchIn(viewModelScope)
-            getNameUseCase().onEach { result ->
-                when(result) {
-                    is Resource.Success -> {
-                        _name.value = _name.value.copy(
-                            data = result.data,
-                            isLoading = false
-                        )
-                    }
-                    is Resource.Error -> {
-                        _name.value = _name.value.copy(
-                            data = result.data,
-                            isLoading = false
-                        )
-                        _errorSnackbar.emit(result.message.toString())
-                    }
-                    is Resource.Loading -> {
-                        _name.value = _name.value.copy(
-                            data = result.data,
-                            isLoading = true
-                        )
-                    }
-                }
-            }.launchIn(viewModelScope)
-        }
     }
 
     fun getTime(): String {
@@ -133,6 +132,7 @@ class HomeViewModel @Inject constructor(
 
     fun getCartCount() {
         getCartsUseCase().onEach { result ->
+            delay(200)
             when(result) {
                 is Resource.Success -> {
                     _cartCount.value = _cartCount.value.copy(
